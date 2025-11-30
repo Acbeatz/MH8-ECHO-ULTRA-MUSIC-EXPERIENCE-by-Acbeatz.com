@@ -1,0 +1,3341 @@
+<!DOCTYPE html>    
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>ACBEATZ.COM — MH8 ECHO PLAYER ULTRA 2026</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#0a0d12" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+
+<!-- Minimal inlined manifest (installable PWA) -->
+<link rel="manifest" href='data:application/manifest+json,{
+  "name": "MH8 Echo Player Ultra 2026",
+  "short_name": "MH8 Player",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#0a0d12",
+  "theme_color": "#0a0d12",
+  "icons": [{
+    "src": "data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><rect width=%22128%22 height=%22128%22 fill=%22%230a0d12%22/><g fill=%22none%22 stroke=%22%23ff00ff%22 stroke-width=%2210%22><ellipse cx=%2264%22 cy=%2240%22 rx=%2234%22 ry=%2222%22/><ellipse cx=%2264%22 cy=%2288%22 rx=%2234%22 ry=%2222%22/></g><circle cx=%2264%22 cy=%2264%22 r=%226%22 fill=%22%2339ff14%22/></svg>",
+    "sizes": "192x192",
+    "type": "image/svg+xml"
+  }]
+}'/>
+
+<!-- 8 favicon -->
+<link rel="icon" href='data:image/svg+xml;utf8,
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <rect width="128" height="128" fill="#0a0d12"/>
+  <g fill="none" stroke="#67e8f9" stroke-width="10">
+    <ellipse cx="64" cy="40" rx="34" ry="22"/>
+    <ellipse cx="64" cy="88" rx="34" ry="22"/>
+  </g>
+  <circle cx="64" cy="64" r="6" fill="#ff00ff"/>
+</svg>'/>
+
+<!-- Optional web fonts for UI FX Font menus -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Exo+2:wght@500;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<!-- Graffiti Pack font -->
+<link href="https://fonts.googleapis.com/css2?family=Rubik+Wet+Paint&display=swap" rel="stylesheet">
+
+<!-- tweetnacl for archetype minting crypto signing -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tweetnacl/0.14.5/nacl.min.js"></script>
+
+<style>
+  :root{
+    /* LUX CYBERPUNK 2026 PALETTE */
+    --bg:#05070b;
+    --panel:#070d16;
+    --panel-2:#0a1220;
+    --ink:#e6f0ff;
+
+    --mag:#ff2bd6;          /* magenta-purple */
+    --neo:#39ff14;          /* neon green */
+    --ele:#4cc9ff;          /* electric blue */
+    --purp:#a855f7;
+
+    --line:#172335;
+    --line-2:#22344e;
+    --dim:#93a7c2;
+
+    --ok:#21e6a1; --warn:#ff9a2f; --err:#ff3b58;
+
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    --sans: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+    --sans-head: "Orbitron", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+
+    /* Premium glow stack (subtle, expensive, not carnival) */
+    --shadow:
+      0 0 0 1px #4cc9ff33,
+      0 0 22px #4cc9ff14,
+      0 0 40px #ff2bd61a,
+      0 0 70px #39ff1412;
+
+    --glass:
+      linear-gradient(180deg, #0b1220cc, #060a10cc),
+      radial-gradient(1200px 600px at 10% -10%, #4cc9ff10, transparent 60%),
+      radial-gradient(1000px 700px at 110% 0%, #ff2bd610, transparent 60%);
+
+    /* Smooth radius system */
+    --r-lg: 18px;
+    --r-md: 12px;
+    --r-sm: 8px;
+    --r-xs: 4px;
+  }
+
+  *{
+    box-sizing:border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .hidden{display:none!important;}
+
+  html,body{height:100%}
+  body{
+    margin:0;
+    color:var(--ink);
+    font-family:var(--sans);
+    overflow:auto;
+
+    /* Deep luxe bed + cyberpunk aurora */
+    background:
+      radial-gradient(1200px 800px at 10% -10%, #0a1b3d 0%, transparent 55%),
+      radial-gradient(1100px 700px at 95% 0%, #2a0a3d 0%, transparent 60%),
+      radial-gradient(900px 600px at 50% 110%, #062b1b 0%, transparent 65%),
+      linear-gradient(180deg,#030508 0,#05070b 35%,#05070b 100%);
+  }
+
+  /* Premium scrollbars */
+  *::-webkit-scrollbar{height:10px;width:10px}
+  *::-webkit-scrollbar-track{background:#060a10}
+  *::-webkit-scrollbar-thumb{
+    background:linear-gradient(180deg,#4cc9ff55,#ff2bd655,#39ff1455);
+    border:2px solid #060a10;
+  }
+
+  /* Collapsible Shell */
+  #app-shell{
+    position:fixed; inset:10px;
+    display:flex; flex-direction:column;
+    background:var(--bg);
+    border:2px solid #05070b;
+    box-shadow:var(--shadow);
+    outline:1px solid #0d1522; outline-offset:-4px;
+    border-radius:var(--r-lg);
+    overflow:hidden;
+  }
+  #app-shell::before{
+    content:""; pointer-events:none; position:absolute; inset:-2px;
+    border:1px solid #4cc9ff44;
+    box-shadow:
+      0 0 0 2px #ff2bd61f inset,
+      0 0 0 1px #39ff1422;
+  }
+  #app-shell::after{
+    content:""; pointer-events:none; position:absolute; inset:0; opacity:.65;
+    background:var(--glass);
+    mix-blend-mode:screen;
+  }
+
+  #app-bar{
+    position:sticky; top:0; z-index:5;
+    display:flex; align-items:center; gap:10px; padding:10px 12px;
+    color:#eef6ff;
+    font:900 12px/1 var(--mono);
+    text-transform:uppercase; letter-spacing:.14em;
+
+    background:
+      linear-gradient(90deg,#04060a,#0a1220 45%,#04060a),
+      radial-gradient(420px 120px at 0% 0%, #4cc9ff11, transparent 70%),
+      radial-gradient(420px 120px at 100% 0%, #ff2bd611, transparent 70%);
+    border-bottom:1px solid var(--line-2);
+    box-shadow:0 8px 20px #000000aa;
+  }
+  #brand{
+    white-space:nowrap;
+    font-family:var(--sans-head);
+    letter-spacing:.18em;
+    text-shadow:0 0 10px #4cc9ff55, 0 0 16px #ff2bd644;
+  }
+  #bar-actions{margin-left:auto; display:flex; gap:8px}
+
+  .chip{
+    border:1px solid var(--line-2);
+    color:#dff2ff;
+    background:
+      linear-gradient(180deg,#0b1424,#05070b);
+    padding:7px 11px; cursor:pointer;
+    font:800 11px/1 var(--mono);
+    letter-spacing:.08em;
+    box-shadow:
+      0 0 0 1px #000 inset,
+      0 6px 16px #00000088;
+    transition:transform .12s ease, border-color .12s ease, box-shadow .12s ease, color .12s ease;
+    border-radius:var(--r-sm);
+  }
+  .chip:hover{
+    transform:translateY(-1px);
+    border-color:#4cc9ff88;
+    box-shadow:0 0 0 1px #4cc9ff33 inset, 0 0 18px #4cc9ff33;
+  }
+  .chip.mag{border-color:var(--mag); color:var(--mag)}
+  .chip.neo{border-color:var(--neo); color:var(--neo)}
+  .chip.pink{border-color:#ff4bd1; color:#ff4bd1}
+
+  #app-body{
+    flex:1; overflow:auto; padding:12px;
+    background:
+      radial-gradient(900px 500px at 5% 0%, #4cc9ff08, transparent 65%),
+      radial-gradient(900px 500px at 95% 0%, #ff2bd608, transparent 65%),
+      linear-gradient(180deg,#05070b 0,#060b12 100%);
+  }
+
+  /* Whole-UI collapse to header bar */
+  #app-shell.collapsed{ bottom:auto; height:auto; }
+  #app-shell.collapsed #app-body{ display:none; }
+
+  /* UI Aesthetic FX themes */
+  #app-shell.fx-noise::after{
+    content:""; position:absolute; inset:0; pointer-events:none; opacity:.18; mix-blend-mode:screen;
+    background:
+      repeating-linear-gradient(0deg, #0000 0 2px, #ffffff0d 2px 3px),
+      radial-gradient(100% 100% at 0 0, #ffffff10 0%, #0000 60%);
+    animation: flick 1.6s infinite steps(2);
+  }
+  @keyframes flick{ 50%{opacity:.11} }
+  #app-shell.theme-ops{ --panel:#050505; --ink:#d7ffd7; --ele:#1aff59; --mag:#0aff9e; }
+  #app-shell.theme-creep{
+    --panel:#0b0a10; --ele:#67e8f9; --mag:#ff4bd1;
+  }
+  #app-shell.theme-creep .title h1{ text-shadow:0 0 10px #ff4bd1, 0 0 18px #39ff14; }
+
+  /* Graffiti Pack FX/FONTS */
+  #app-shell.theme-graffiti{
+    --panel:#0b0f16;
+    --ink:#f3f6ff;
+    --sans-head:"Rubik Wet Paint", var(--sans);
+  }
+  #app-shell.theme-graffiti .title h1,
+  #app-shell.theme-graffiti .bar,
+  #app-shell.theme-graffiti #app-bar{
+    text-shadow:0 0 8px #ff00ff, 0 0 14px #67e8f9;
+  }
+  #app-shell.theme-graffiti::after{
+    content:""; position:absolute; inset:0; pointer-events:none; opacity:.12; mix-blend-mode:screen;
+    background:
+      radial-gradient(160px 110px at 10% 15%, #ff00ff33, transparent 65%),
+      radial-gradient(180px 120px at 85% 20%, #39ff1433, transparent 65%),
+      radial-gradient(200px 140px at 25% 85%, #67e8f933, transparent 70%);
+  }
+
+  /* App wrap */
+  .wrap{
+    max-width:1020px; margin:0 auto; padding:14px;
+    border:1px solid var(--line-2);
+    background:var(--panel);
+    box-shadow:var(--shadow);
+    outline:1px solid #ff2bd633; outline-offset:-6px;
+    border-radius:var(--r-md);
+  }
+
+  /* Action bubble for confirmations */
+  #actionBubble{
+    position:absolute;
+    right:16px;
+    bottom:16px;
+    max-width:260px;
+    padding:8px 12px;
+    font:800 11px/1.3 var(--mono);
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    background:
+      radial-gradient(240px 160px at 0 0,#4cc9ff22,transparent 60%),
+      linear-gradient(135deg,#0b1220,#05070b);
+    color:#e5f3ff;
+    border:1px solid var(--ele);
+    box-shadow:0 0 0 1px #000 inset, 0 0 18px #4cc9ff66;
+    opacity:0;
+    transform:translateY(10px);
+    pointer-events:none;
+    transition:opacity .18s ease, transform .18s ease;
+    z-index:60;
+    border-radius:var(--r-sm);
+  }
+  #actionBubble.show{
+    opacity:1;
+    transform:translateY(0);
+  }
+
+  .btn.burst,
+  .chip.burst{
+    box-shadow:0 0 0 1px #4cc9ffcc inset, 0 0 18px #4cc9ff88;
+    border-color:#4cc9ffb3;
+    color:#f5fbff;
+  }
+
+  .title{
+    text-align:center; font-weight:900; letter-spacing:.18em; padding:14px 8px;
+    background:
+      linear-gradient(90deg,#060b12,#0b1424 45%,#060b12),
+      radial-gradient(520px 140px at 50% 0%, #4cc9ff14, transparent 70%);
+    border-bottom:1px solid var(--line-2);
+  }
+  .title h1{
+    margin:0;
+    font-size:20px;
+    color:#d6ebff;
+    font-family:var(--sans-head, var(--sans));
+    text-shadow:0 0 14px #4cc9ff55, 0 0 20px #ff2bd633;
+  }
+  .subtitle{
+    color:var(--dim);
+    font:700 12px var(--mono);
+    text-align:center;
+    margin-top:8px;
+    letter-spacing:.05em;
+  }
+
+  /* Panels */
+  .panel{
+    border:1px solid var(--line-2);
+    margin-top:12px;
+    background:linear-gradient(180deg,var(--panel),var(--panel-2));
+    box-shadow:0 10px 26px #00000099 inset;
+    border-radius:var(--r-md);
+    overflow:hidden;
+  }
+  .bar{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    padding:12px 10px; cursor:pointer; user-select:none;
+    background:
+      linear-gradient(90deg,#0a1220,#0e1930 35%,#0a1220),
+      radial-gradient(420px 90px at 0% 0%, #4cc9ff10, transparent 70%),
+      radial-gradient(420px 90px at 100% 0%, #ff2bd610, transparent 70%);
+    border-bottom:1px solid var(--line-2);
+    color:#cfe7ff; font-weight:900; text-transform:uppercase; letter-spacing:.08em;
+    text-shadow:0 0 8px #4cc9ff33;
+  }
+  .bar .aux{
+    display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end; max-width:100%;
+  }
+
+  .btn{
+    border:1px solid var(--line-2);
+    background:
+      linear-gradient(180deg,#0d1628,#05070b);
+    color:#dff2ff;
+    font:800 12px/1 var(--mono);
+    padding:9px 11px; cursor:pointer; text-transform:uppercase; white-space:nowrap;
+    letter-spacing:.08em;
+    box-shadow:
+      0 0 0 1px #000 inset,
+      0 6px 16px #00000088;
+    transition:transform .12s ease, border-color .12s ease, box-shadow .12s ease, color .12s ease;
+    border-radius:var(--r-sm);
+  }
+  .btn:hover{
+    transform:translateY(-1px);
+    border-color:#4cc9ff88;
+    box-shadow:0 0 0 1px #4cc9ff33 inset, 0 0 18px #4cc9ff33;
+    color:#f1fbff;
+  }
+  .btn.mag{
+    border-color:var(--mag); color:var(--mag);
+    box-shadow:0 0 0 1px #ff2bd622 inset, 0 0 16px #ff2bd622;
+  }
+  .btn.neo{
+    border-color:var(--neo); color:var(--neo);
+    box-shadow:0 0 0 1px #39ff1422 inset, 0 0 16px #39ff1422;
+  }
+  .btn.warn{border-color:var(--warn); color:var(--warn)}
+  .btn.err{border-color:var(--err); color:var(--err)}
+
+  .content{
+    max-height:0; overflow:hidden;
+    transition:max-height .35s ease, opacity .25s ease, transform .25s ease;
+    opacity:.6; transform:translateY(-4px);
+  }
+  /* FIX: only open the direct child content of the toggled panel (nested panels now toggle correctly) */
+  .panel.open > .content{
+    max-height:1600px;
+    opacity:1; transform:translateY(0);
+  }
+
+  /* Grid rows */
+  .row{
+    display:flex; gap:12px; padding:12px;
+    border-bottom:1px solid var(--line-2); align-items:center;
+    background:
+      linear-gradient(180deg,#05070b00,#0b14220f);
+  }
+  .row:nth-child(even){
+    background:
+      linear-gradient(180deg,#05070b00,#0b14221a);
+  }
+  .row:last-child{border-bottom:0}
+  .col{flex:1}
+
+  label{
+    font:800 11px/1 var(--mono);
+    color:var(--dim); text-transform:uppercase; letter-spacing:.08em;
+  }
+
+  input[type="text"], input[type="range"], select, textarea{
+    width:100%; padding:10px 11px;
+    background:#04060a;
+    color:var(--ink);
+    border:1px solid var(--line-2);
+    font:700 13px/1.25 var(--mono); outline:none;
+    box-shadow:0 0 0 1px #000 inset;
+    transition:border-color .12s ease, box-shadow .12s ease;
+    border-radius:var(--r-sm);
+  }
+  input[type="text"]:focus, select:focus, textarea:focus{
+    border-color:#4cc9ffbb;
+    box-shadow:0 0 0 1px #4cc9ff55 inset, 0 0 18px #4cc9ff33;
+  }
+  input[type="file"]{
+    font:600 12px var(--mono); color:var(--ink);
+    border-radius:var(--r-sm);
+  }
+
+  /* Visualizers */
+  .viz{display:grid; grid-template-columns:1fr; gap:12px; padding:12px; align-items:stretch}
+  canvas{
+    width:100%; height:210px; display:block;
+    background:#000; border:1px solid var(--ele);
+    box-shadow:0 0 0 1px #000 inset, 0 0 22px #4cc9ff22;
+    border-radius:var(--r-sm);
+    overflow:hidden;
+  }
+  #lyricsFrame{
+    width:100%; height:210px; display:block;
+    background:#000; border:1px solid var(--ele);
+    box-shadow:0 0 0 1px #000 inset, 0 0 22px #4cc9ff22;
+    border-radius:var(--r-sm);
+    overflow:hidden;
+  }
+
+  /* Progress + time */
+  .progress{
+    display:flex; align-items:center; gap:12px; padding:12px;
+    background:linear-gradient(180deg,#05070b,#05070b00);
+  }
+  .meter{
+    flex:1; height:12px; background:#0b1320; cursor:pointer;
+    border:1px solid var(--line-2); position:relative;
+    box-shadow:0 0 0 1px #000 inset;
+    border-radius:var(--r-xs);
+    overflow:hidden;
+  }
+  .fill{
+    position:absolute; inset:0 auto 0 0; width:0%;
+    background:linear-gradient(90deg,#39ff14,#4cc9ff,#ff2bd6);
+    box-shadow:0 0 10px #39ff1455;
+  }
+  .time{
+    font:800 11px var(--mono); color:#cfe7ff; min-width:170px; text-align:right; letter-spacing:.06em;
+  }
+
+  /* Playlist */
+  .tracks{
+    max-height:300px; overflow:auto; border-top:1px solid var(--line-2);
+    border-radius:var(--r-sm);
+  }
+  .track{
+    display:grid; grid-template-columns:1fr auto auto auto;
+    gap:10px; padding:12px; border-bottom:1px solid var(--line-2);
+    background:linear-gradient(180deg,#05070b,#070d160f);
+    transition:background .12s ease, border-color .12s ease;
+    border-radius:0;
+  }
+  .track:hover{
+    background:linear-gradient(180deg,#071122,#08162c);
+    border-color:#4cc9ff55;
+  }
+  .track.now{
+    border-left:6px solid var(--mag);
+    background:linear-gradient(180deg,#0b1020,#090f1a);
+    box-shadow:inset 0 0 0 1px #ff2bd622;
+  }
+  .act{display:flex; gap:6px}
+  .drag{
+    cursor:grab; border:1px solid #5b6b83; color:#a1b7d3;
+    padding:6px 8px; font:800 11px var(--mono);
+    background:#060a10;
+    border-radius:var(--r-xs);
+  }
+
+  /* Controls */
+  .controls{display:grid; grid-template-columns:repeat(6,1fr); gap:12px; padding:12px}
+  .help{
+    color:var(--dim); font:700 11px var(--mono); padding:10px; letter-spacing:.02em;
+  }
+
+  /* Transport grouped layout */
+  .transport{
+    display:flex; flex-wrap:wrap; gap:12px; padding:12px; align-items:center;
+    border-bottom:1px solid var(--line-2);
+    background:linear-gradient(180deg,#05070b,#060a1000);
+  }
+  .tgroup{
+    display:flex; flex-direction:column; gap:8px; padding:10px;
+    border:1px solid var(--line-2);
+    background:#05070b;
+    flex:1; min-width:180px;
+    box-shadow:0 0 0 1px #000 inset;
+    border-radius:var(--r-sm);
+  }
+  .tlabel{
+    font:900 10px/1 var(--mono); color:var(--dim);
+    text-transform:uppercase; letter-spacing:.14em;
+  }
+  .tbuttons{
+    display:flex; flex-wrap:wrap; gap:8px; align-items:center;
+  }
+
+  /* Tempo slider center marker */
+  #rate{background:
+      linear-gradient(to right, transparent 0, transparent calc(50% - 1px), #ff00ff calc(50% - 1px), #ff00ff calc(50% + 1px), transparent calc(50% + 1px), transparent 100%)
+  }
+
+  /* Neon Draw Palette */
+  .palette{
+    display:flex; flex-wrap:wrap; gap:6px;
+    padding:8px; border:1px solid var(--line-2); background:#05070b;
+    border-radius:var(--r-sm);
+  }
+  .swatch{
+    width:22px; height:22px; border:1px solid #101418; cursor:pointer;
+    box-shadow:0 0 8px #000 inset, 0 0 10px currentColor;
+    border-radius:var(--r-sm);
+  }
+  .swatch.active{
+    outline:2px solid var(--ele);
+    box-shadow:0 0 0 2px #ff2bd699 inset, 0 0 18px currentColor;
+  }
+
+  /* Horizontal canvas button toolbar */
+  .canvas-toolbar{
+    display:flex; flex-wrap:wrap; gap:6px; align-items:center; justify-content:flex-start;
+  }
+
+  /* Modal (UI FX menu) */
+  .modal{
+    position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
+    background:rgba(0,0,0,.7); z-index:9999;
+    backdrop-filter: blur(2px);
+  }
+  .modal.hidden{display:none}
+  .modal-card{
+    width:min(520px,92vw);
+    background:linear-gradient(180deg,#071122,#04060a);
+    border:1px solid var(--line-2);
+    box-shadow:var(--shadow);
+    padding:16px;
+    border-radius:var(--r-md);
+  }
+  .modal-card h3{
+    margin:0 0 10px;
+    font:900 14px var(--mono);
+    letter-spacing:.18em; text-transform:uppercase; color:#d6ebff;
+  }
+  .opt-row{display:grid; grid-template-columns:1fr; gap:10px; margin:10px 0}
+  .opt-group{border:1px solid var(--line-2); padding:10px; background:#05070b; border-radius:var(--r-sm);}
+  .opt-title{font:900 11px var(--mono); color:#b8d6ff; text-transform:uppercase; margin-bottom:6px}
+  .opt-list{display:flex; flex-wrap:wrap; gap:8px}
+
+  .pill{
+    padding:7px 10px;
+    border:1px solid var(--line-2);
+    color:#cfe7ff; font:800 11px var(--mono); cursor:pointer;
+    background:linear-gradient(180deg,#0a1220,#05070b);
+    letter-spacing:.06em;
+    border-radius:var(--r-sm);
+  }
+  .pill.active{border-color:var(--mag); color:var(--mag); box-shadow:0 0 10px #ff2bd644}
+  .modal-actions{display:flex; gap:10px; justify-content:flex-end; margin-top:10px}
+  .modal .btn{white-space:nowrap}
+
+  /* Mobile */
+  @media (max-width:820px){
+    .time{min-width:130px}
+    .controls{grid-template-columns:repeat(3,1fr)}
+    .viz{grid-template-columns:1fr}
+  }
+
+  @media (max-width:600px){
+    #app-shell{
+      inset:0;
+      border-width:1px;
+      padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    }
+    .row{
+      flex-direction:column;
+      align-items:stretch;
+    }
+    .transport{
+      flex-direction:column;
+    }
+    .tgroup{
+      min-width:100%;
+    }
+    .progress{
+      flex-direction:column;
+      align-items:flex-start;
+    }
+    .time{
+      min-width:auto;
+      text-align:left;
+      margin-top:4px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div id="app-shell">
+  <div id="app-bar">
+    <div id="brand">Acbeatz.com Echo Player</div>
+    <div id="bar-actions">
+      <button class="chip pink" id="uiFxBtn" title="UI FX & Fonts">UI FX</button>
+      <button class="chip mag" id="textFxBtn" title="All Text Blocks — Colors & Fonts">TEXT FX</button>
+      <button class="chip neo" id="bar-toggle">TOGGLE</button>
+    </div>
+  </div>
+
+  <div id="app-body">
+    <div class="wrap" id="app">
+      <div class="title">
+        <h1>ACBEATZ.COM — MH8 ECHO PLAYER ULTRA 2026</h1>
+      </div>
+
+      <!-- PLAYER CORE -->
+      <div class="panel open" id="p-core">
+        <div class="bar">
+          <div>Player • Transport • Status</div>
+          <div class="aux">
+            <button class="btn" data-toggle="#p-core">Collapse</button>
+          </div>
+        </div>
+        <div class="content">
+          <div class="viz">
+            <iframe id="lyricsFrame" title="Lyrics Scroll + Canvas" sandbox="allow-scripts allow-same-origin"></iframe>
+          </div>
+
+          <div class="progress">
+            <div class="meter" id="progressMeter"><div class="fill" id="progressFill"></div></div>
+            <div class="time"><span id="tCur">0:00</span> / <span id="tTot">0:00</span> <span id="tRem" style="color:#7aa7ff">(-0:00)</span></div>
+          </div>
+
+          <!-- Transport + Modes + Palette -->
+          <div class="transport">
+            <div class="tgroup">
+              <div class="tlabel">Transport</div>
+              <div class="tbuttons">
+                <button class="btn neo" id="btnPrev">◄◄</button>
+                <button class="btn" id="btnPlay">PLAY</button>
+                <button class="btn neo" id="btnNext">►►</button>
+                <button class="btn" id="btnStop">STOP</button>
+                <button class="btn" id="undoCanvas">UNDO</button>
+                <button class="btn" id="redoCanvas">REDO</button>
+                <button class="btn warn" id="clearCanvas">CLEAR CANVAS</button>
+                <button class="btn warn" id="lyricsMasterClear">MASTER CLEAR</button>
+              </div>
+            </div>
+            <div class="tgroup">
+              <div class="tlabel">Modes</div>
+              <div class="tbuttons">
+                <button class="btn mag" id="btnShuffle">SHUFFLE OFF</button>
+                <button class="btn mag" id="btnLoop">LOOP OFF</button>
+                <button class="btn neo" id="randomCanvas">RANDOM</button>
+                <button class="btn mag" id="bindDrawing">BIND DRAWING</button>
+                <button class="btn err" id="unbindDrawing">UN-BIND DRAWING</button>
+                <button class="btn mag" id="copyExport">COPY EXPORT</button>
+                <button class="btn neo" id="exportSigil">EXPORT PNG SVG</button>
+              </div>
+            </div>
+            <div class="tgroup">
+              <div class="tlabel">Neon Ink Palette</div>
+              <div class="tbuttons">
+                <div id="palette" class="palette"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col">
+              <label>Volume</label>
+              <input type="range" id="vol" min="0" max="1" step="0.01" value="0.9"/>
+            </div>
+            <div class="col">
+              <label>Playback Rate <span id="rateLabel" class="help" style="margin-left:6px">1.00×</span></label>
+              <div class="act">
+                <input type="range" id="rate" min="0.5" max="2" step="0.01" value="1" style="flex:1"/>
+                <button class="btn neo" id="rateOrig" title="Reset to original tempo">1×</button>
+              </div>
+            </div>
+            <div class="col">
+              <label>A↔B Loop (Tap to set)</label>
+              <div class="act">
+                <button class="btn" id="setA">Set A</button>
+                <button class="btn" id="setB">Set B</button>
+                <button class="btn warn" id="clearAB">Clear</button>
+                <button class="btn neo" id="exportAB">EXPORT A-B LOOP</button>
+                <div class="help" id="abInfo">A: —  B: —</div>
+                <button class="btn" id="addFxToExport" style="font-size:10px;padding:5px 7px;opacity:.85">ADD FX</button>
+                <button class="btn" id="addEqToExport" style="font-size:10px;padding:5px 7px;opacity:.85">ADD EQ</button>
+              </div>
+            </div>
+          </div>
+
+          <audio id="audio" preload="metadata" style="width:100%; display:block; border:2px solid var(--line)"></audio>
+        </div>
+      </div>
+
+      <!-- LYRICS INPUT + BINDING CONTROLS -->
+      <div class="panel open" id="p-lyrics">
+        <div class="bar">
+          <div>Lyrics Input • Actions • Tempo</div>
+          <div class="aux">
+            <button class="btn" data-toggle="#p-lyrics">Toggle</button>
+          </div>
+        </div>
+        <div class="content">
+          <div class="row" id="lyricsRow" style="align-items:flex-start">
+            <div class="col">
+              <label>Lyrics Input</label>
+              <textarea id="lyricsInput" rows="6" placeholder="Paste or type lyrics here..."></textarea>
+              <div class="help" style="margin-top:6px">Add lyrics to the scrolling screen. Bind to lock them to this track.</div>
+            </div>
+            <div class="col" style="max-width:260px">
+              <label>Lyrics Actions</label>
+              <div class="act" style="flex-direction:column; align-items:stretch">
+                <button class="btn neo" id="addLyrics">ADD LYRICS</button>
+                <button class="btn mag" id="bindLyrics">BIND LYRICS</button>
+                <button class="btn err" id="removeLyrics">REMOVE LYRICS</button>
+
+                <label style="margin-top:8px;">Lyrics Font</label>
+                <select id="lyricsFontSelect">
+                  <option value="DEFAULT">Default</option>
+                  <option value="EXO2">Exo 2</option>
+                  <option value="ORBITRON">Orbitron</option>
+                  <option value="JETMONO">JetBrains Mono</option>
+                  <option value="GRAFFITI">Graffiti</option>
+                </select>
+                <div style="display:flex; gap:8px; margin-top:6px; flex-wrap:wrap;">
+                  <button class="btn" id="lyricsFx">APPLY FONT</button>
+                  <button class="btn warn" id="lyricsFontClear">REMOVE FONT</button>
+                </div>
+
+                <div class="help" id="lyricsMsg" style="margin-top:6px">—</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row" id="lyricsSpeedRow">
+            <div class="col">
+              <label>Lyrics Tempo <span id="lyricsSpeedLabel" class="help" style="margin-left:6px">120 BPM</span></label>
+              <input type="range" id="lyricsSpeed" min="60" max="180" step="1" value="120"/>
+            </div>
+            <div class="act">
+              <button class="btn neo" id="tempoSync">SYNC</button>
+              <button class="btn warn" id="tempoClearSync">CLEAR SYNC</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AUDIO FX SUITE -->
+      <div class="panel" id="p-fx">
+        <div class="bar">
+          <div>FX Suite • Wet/Dry • Reverb • Delay • Chorus • Distortion • LoFi</div>
+          <div class="aux">
+            <button class="btn neo" id="fxByp">BYPASS OFF</button>
+            <button class="btn" data-toggle="#p-fx">Toggle</button>
+          </div>
+        </div>
+        <div class="content">
+          <div class="row">
+            <div class="col"><label>Wet/Dry</label><input type="range" id="fxMix" min="0" max="1" step="0.01" value="0"/></div>
+            <div class="col"><label>Output Trim</label><input type="range" id="fxOut" min="0" max="1.5" step="0.01" value="1"/></div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <label><input type="checkbox" id="fxReverb"> Reverb</label>
+              <div class="help">Size / Tone</div>
+              <input type="range" id="rvSize" min="0.2" max="3" step="0.1" value="1.2"/>
+              <input type="range" id="rvTone" min="500" max="8000" step="50" value="3000"/>
+            </div>
+            <div class="col">
+              <label><input type="checkbox" id="fxDelay"> Delay</label>
+              <div class="help">Time / Feedback</div>
+              <input type="range" id="dlTime" min="0.05" max="0.6" step="0.01" value="0.25"/>
+              <input type="range" id="dlFb" min="0" max="0.9" step="0.01" value="0.35"/>
+            </div>
+            <div class="col">
+              <label><input type="checkbox" id="fxChorus"> Chorus</label>
+              <div class="help">Rate / Depth</div>
+              <input type="range" id="chRate" min="0.1" max="5" step="0.1" value="1.8"/>
+              <input type="range" id="chDepth" min="0.0005" max="0.02" step="0.0005" value="0.004"/>
+            </div>
+            <div class="col">
+              <label><input type="checkbox" id="fxDrive"> Distortion</label>
+              <div class="help">Amount</div>
+              <input type="range" id="dsAmt" min="0" max="1000" step="10" value="0"/>
+              <label style="margin-top:8px; display:block"><input type="checkbox" id="fxLoFi"> LoFi</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- IMPORT / LIBRARY -->
+      <div class="panel" id="p-import">
+        <div class="bar">
+          <div>Import • Library • Storage</div>
+          <div class="aux">
+            <button class="btn" data-toggle="#p-import">Toggle</button>
+          </div>
+        </div>
+        <div class="content">
+          <div class="row">
+            <div class="col">
+              <label>Drop Audio / MP4 Files</label>
+              <div id="drop" style="border:2px dashed var(--neo); padding:20px; text-align:center; color:#a8ffc6; cursor:pointer; border-radius:var(--r-sm);">
+                DROP FILES HERE (or click to select)
+              </div>
+            </div>
+            <div class="col">
+              <label>Select Files</label>
+              <input id="file" type="file" accept="audio/*,video/mp4,video/webm,video/ogg" multiple />
+              <div class="help">Large files are stored in IndexedDB (fallback to memory if unavailable).</div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="act">
+              <button class="btn mag" id="exportJson">Export All Playlist</button>
+              <button class="btn err" id="wipeAll">Wipe Library</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PLAYLIST -->
+      <div class="panel" id="p-playlist">
+        <div class="bar">
+          <div>Playlist • <span id="trackCount">0</span> tracks</div>
+          <div class="aux">
+            <button class="btn" data-toggle="#p-playlist">Toggle</button>
+          </div>
+        </div>
+        <div class="content">
+          <div class="tracks" id="tracks"></div>
+          <div class="help">Drag ☰ to reorder • Click name to play • ⌫ deletes track • Double-click background to stop</div>
+        </div>
+      </div>
+
+      <!-- EQUALIZER -->
+      <div class="panel" id="p-eq">
+        <div class="bar">
+          <div>Equalizer • 10-Band + Presets</div>
+          <div class="aux">
+            <button class="btn" id="eqFlat">FLAT</button>
+            <button class="btn" id="eqBass">BASS</button>
+            <button class="btn" id="eqTreble">TREBLE</button>
+            <button class="btn" id="eqVocal">VOCAL</button>
+            <button class="btn" id="eqPop">POP</button>
+            <button class="btn" id="eqRap">RAP</button>
+            <button class="btn" id="eqMetal">METAL</button>
+            <button class="btn" id="eqClarity">CLARITY</button>
+            <button class="btn neo" id="eqSaveUser">SAVE EQ</button>
+            <button class="btn" data-toggle="#p-eq">Toggle</button>
+          </div>
+        </div>
+        <div class="content">
+          <div class="row" id="eqRow"></div>
+          <div class="row" id="eqUserRow" style="align-items:center; gap:8px">
+            <div class="col">
+              <label>User Presets</label>
+              <select id="eqUserSelect">
+                <option value="">(none saved)</option>
+              </select>
+            </div>
+            <div class="act">
+              <button class="btn neo" id="eqUserLoad">LOAD</button>
+              <button class="btn err" id="eqUserDel">DEL</button>
+            </div>
+            <div class="help" id="eqUserMsg">—</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MINI VAULT (IMMUTABLE INTERNAL) + SHORTCUTS + ARCHETYPE MINTING -->
+      <div class="panel" id="p-settings">
+        <div class="bar">
+          <div>MINI  VAULT INTERNAL STORAGE &amp; U.I&gt;&lt;I.D. MINTING SYSTEM</div>
+          <div class="aux">
+            <button class="btn" data-toggle="#p-settings">Toggle</button>
+          </div>
+        </div>
+        <div class="content">
+          <div class="row">
+            <div class="col">
+              <label>Mini Vault (Immutable)</label>
+              <div class="help">
+                Up to 16 tracks are pinned as internal “hard objects” inside this UI. New imports auto-fill empty slots. Use Remove to free space.
+              </div>
+            </div>
+            <div class="col" style="max-width:220px">
+              <label>Vault Slots</label>
+              <div class="help"><span id="vaultCount">0</span> / 16</div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div class="tracks" id="vaultTracks"></div>
+              <div class="help" id="vaultMsg">Mini Vault is empty. Import audio to auto-pin up to 16 tracks.</div>
+            </div>
+          </div>
+
+          <!-- ARCHETYPE MINTING STATION INSIDE VAULT -->
+          <div class="row">
+            <div class="col">
+              <div class="panel" id="p-archetype-mint">
+                <div class="bar">
+                  <div>Archetype Minting • CTKLT Genesis Station</div>
+                  <div class="aux">
+                    <button class="btn" data-toggle="#p-archetype-mint">Toggle</button>
+                  </div>
+                </div>
+                <div class="content">
+                  <div id="minting-app" style="padding:12px;">
+                    <div id="message-container" class="help" style="margin-bottom:8px;">
+                      Mint a device-bound archetype receipt for this Mini Vault (CTKLT declaration + cryptographic G1 hash).
+                    </div>
+                    <div id="minting-form-fields">
+                      <div class="row" style="border-bottom:0; padding:0; margin-bottom:8px;">
+                        <div class="col">
+                          <label>Purchase Key</label>
+                          <input id="purchaseKeyInput" type="text" placeholder="e.g., ABC-123-PAID-XYZ">
+                        </div>
+                      </div>
+                      <div class="row" style="border-bottom:0; padding:0; margin-bottom:8px;">
+                        <div class="col">
+                          <label>Owner Name</label>
+                          <input id="ownerNameInput" type="text" placeholder="e.g., Michael M. Hepler">
+                        </div>
+                      </div>
+                      <div class="row" style="border-bottom:0; padding:0; margin-bottom:8px;">
+                        <div class="col">
+                          <label>CTKLT Message</label>
+                          <textarea id="ctkltMessageInput" rows="3" placeholder="Canonical • Truth • Kindness • Love • Trust declaration"></textarea>
+                        </div>
+                      </div>
+                      <div class="row" style="border-bottom:0; padding:0; margin-bottom:4px;">
+                        <div class="col">
+                          <button id="mintAndLaunchButton" type="button" class="btn neo" style="width:100%;">MINT ARCHETYPE</button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div id="receipt-container" class="hidden" style="margin-top:8px;">
+                      <label class="help">Immutable JSON Receipt (save offline)</label>
+                      <pre id="jsonReceiptDisplay" class="help" style="max-height:180px;overflow:auto;white-space:pre-wrap;background:#05070b;border:1px solid var(--line-2);padding:8px;border-radius:var(--r-sm);"></pre>
+                      <div class="act" style="margin-top:6px;flex-wrap:wrap;">
+                        <button type="button" class="btn" onclick="copyToClipboard(document.getElementById('jsonReceiptDisplay').textContent)">Copy Receipt</button>
+                        <button type="button" class="btn neo" id="mintExportJsonButton">Export JSON</button>
+                        <!-- NEW CLEAR BUTTON -->
+                        <button type="button" class="btn warn" id="mintClearButton">CLEAR</button>
+                      </div>
+                      <div class="help" style="margin-top:6px;color:#ffb4c4;">
+                        **WARNING**: This receipt is your only key for future device recovery or vault migration. Save it securely.
+                      </div>
+                    </div>
+
+                    <p id="permanentHashDisplay" class="help hidden" style="margin-top:8px;"></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- END ARCHETYPE MINTING STATION -->
+
+          <div class="row">
+            <div class="col">
+              <label>Shortcuts</label>
+              <div class="help">
+                Space=Play/Pause • ←/→=Seek 5s • ↑/↓=Vol • S=Shuffle • L=Loop • +/-=Rate • A/B=set loop points • ESC=Clear A/B
+              </div>
+            </div>
+            <div class="col">
+              <label>Installable</label>
+              <div class="help">Add to Home Screen / Install — PWA service worker caches the shell for offline UI.</div>
+            </div>
+            <div class="col">
+              <label>Gestures</label>
+              <div class="help">Waveform: tap seek • Swipe left/right on header: next/prev</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" style="justify-content:center">
+        <a class="btn neo" href="https://acbeatz.com" target="_blank" rel="noopener">ACBEATZ.COM MUSIC</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Global confirmation bubble -->
+  <div id="actionBubble"></div>
+</div>
+
+<!-- UI FX & FONT MENU (modal) -->
+<div id="uiFxMenu" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="uiFxTitle">
+  <div class="modal-card">
+    <h3 id="uiFxTitle">UI FX & Fonts</h3>
+    <div class="opt-row">
+      <div class="opt-group">
+        <div class="opt-title">Theme FX</div>
+        <div class="opt-list" id="themeList">
+          <div class="pill" data-theme="OFF">Off</div>
+          <div class="pill" data-theme="NOISE">Noisifier</div>
+          <div class="pill" data-theme="OPS">Black-Ops</div>
+          <div class="pill" data-theme="CREEP">Creepshow</div>
+          <div class="pill" data-theme="GRAFFITI">Graffiti Pack</div>
+        </div>
+      </div>
+      <div class="opt-group">
+        <div class="opt-title">Fonts (Global)</div>
+        <div class="opt-list" id="fontList">
+          <div class="pill" data-font="DEFAULT">Default (Inter/System)</div>
+          <div class="pill" data-font="ORBITRON">Orbitron (Headers)</div>
+          <div class="pill" data-font="EXO2">Exo 2 (Body)</div>
+          <div class="pill" data-font="JETMONO">JetBrains Mono (Mono)</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" id="uiFxClose">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- TEXT FX (All Text Blocks) -->
+<div id="textFxMenu" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="textFxTitle">
+  <div class="modal-card">
+    <h3 id="textFxTitle">Text Blocks — Colors & Fonts</h3>
+    <div class="opt-row">
+      <div class="opt-group">
+        <div class="opt-title">Text Color Theme</div>
+        <div class="opt-list" id="textThemeList">
+          <div class="pill" data-ttheme="DEFAULT">Default</div>
+          <div class="pill" data-ttheme="PUREWHITE">Pure White</div>
+          <div class="pill" data-ttheme="ICEBLUE">Ice Blue</div>
+          <div class="pill" data-ttheme="WARMAMBER">Warm Amber</div>
+          <div class="pill" data-ttheme="ROSE">Rose</div>
+          <div class="pill" data-ttheme="HIGHCON">High Contrast</div>
+        </div>
+      </div>
+      <div class="opt-group">
+        <div class="opt-title">Heading Font</div>
+        <div class="opt-list" id="textHeadList">
+          <div class="pill" data-hfont="DEFAULT">Default</div>
+          <div class="pill" data-hfont="ORBITRON">Orbitron</div>
+          <div class="pill" data-hfont="EXO2">Exo 2</div>
+        </div>
+      </div>
+      <div class="opt-group">
+        <div class="opt-title">Body Font</div>
+        <div class="opt-list" id="textBodyList">
+          <div class="pill" data-bfont="DEFAULT">Default</div>
+          <div class="pill" data-bfont="EXO2">Exo 2</div>
+          <div class="pill" data-bfont="INTER">Inter/System</div>
+        </div>
+      </div>
+      <div class="opt-group">
+        <div class="opt-title">Mono/Labels Font</div>
+        <div class="opt-list" id="textMonoList">
+          <div class="pill" data-mfont="DEFAULT">Default</div>
+          <div class="pill" data-mfont="JETMONO">JetBrains Mono</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" id="textFxClose">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* =========================
+   UTILITIES
+========================= */
+const $ = sel => document.querySelector(sel);
+const $$ = sel => Array.from(document.querySelectorAll(sel));
+const fmtTime = s => {
+  if (!isFinite(s)) return '0:00';
+  const m = Math.floor(s/60)|0, t = Math.floor(s%60)|0;
+  return m + ':' + String(t).padStart(2,'0');
+};
+function stableStringify(obj){
+  const sort = x => Array.isArray(x) ? x.map(sort) :
+    (x && typeof x==='object') ? Object.keys(x).sort().reduce((o,k)=> (o[k]=sort(x[k]),o),{}) : x;
+  return JSON.stringify(sort(obj));
+}
+
+/* =========================
+   ACTION BUBBLE (CLICK CONFIRMATION)
+========================= */
+let actionBubble = null;
+let actionBubbleTimer = null;
+function showActionBubble(msg){
+  if(!msg) return;
+  if(!actionBubble) actionBubble = $('#actionBubble');
+  if(!actionBubble) return;
+  actionBubble.textContent = msg;
+  actionBubble.classList.add('show');
+  clearTimeout(actionBubbleTimer);
+  actionBubbleTimer = setTimeout(()=> actionBubble.classList.remove('show'), 1200);
+}
+document.addEventListener('click', e=>{
+  const btn = e.target.closest('.btn, .chip');
+  if(!btn) return;
+  btn.classList.add('burst');
+  setTimeout(()=> btn.classList.remove('burst'), 180);
+});
+
+/* =========================
+   COLLAPSIBLE SHELL + UI FX
+========================= */
+function togglePanel(id){
+  const el = document.querySelector(id);
+  if(!el) return;
+  el.classList.toggle('open');
+}
+document.addEventListener('click', e=>{
+  const t = e.target.closest('[data-toggle]');
+  if(t){ e.preventDefault(); togglePanel(t.getAttribute('data-toggle')); }
+});
+
+/* whole-app collapse/expand */
+const barToggleBtn = $('#bar-toggle');
+barToggleBtn.addEventListener('click', ()=>{
+  const shell = $('#app-shell');
+  const collapsed = shell.classList.toggle('collapsed');
+  barToggleBtn.textContent = collapsed ? 'EXPAND' : 'TOGGLE';
+});
+
+/* UI FX modal */
+const UI_FX_MODES = ['OFF','NOISE','OPS','CREEP','GRAFFITI'];
+function applyUiFx(mode){
+  const s = $('#app-shell');
+  s.classList.remove('fx-noise','theme-ops','theme-creep','theme-graffiti');
+  if(mode==='NOISE') s.classList.add('fx-noise');
+  if(mode==='OPS') s.classList.add('theme-ops');
+  if(mode==='CREEP') s.classList.add('theme-creep');
+  if(mode==='GRAFFITI') s.classList.add('theme-graffiti');
+  localStorage.setItem('mh8_ui_fx_mode', mode);
+}
+function applyFonts(tag){
+  if(tag==='ORBITRON'){
+    document.documentElement.style.setProperty('--sans','"Orbitron", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif');
+  } else if(tag==='EXO2'){
+    document.documentElement.style.setProperty('--sans','"Exo 2", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif');
+  } else {
+    document.documentElement.style.setProperty('--sans','Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif');
+  }
+  if(tag==='JETMONO'){
+    document.documentElement.style.setProperty('--mono','"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace');
+  } else if (tag!=='ORBITRON' && tag!=='EXO2') {
+    document.documentElement.style.setProperty('--mono','ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace');
+  }
+  localStorage.setItem('mh8_ui_font_tag', tag);
+}
+function hydrateUiFxControls(){
+  const savedMode = localStorage.getItem('mh8_ui_fx_mode') || 'OFF';
+  const savedFont = localStorage.getItem('mh8_ui_font_tag') || 'DEFAULT';
+  applyUiFx(savedMode); applyFonts(savedFont);
+  $$('#themeList .pill').forEach(p=> p.classList.toggle('active', p.dataset.theme===savedMode));
+  $$('#fontList  .pill').forEach(p=> p.classList.toggle('active', p.dataset.font===savedFont));
+}
+function openUiFx(){ $('#uiFxMenu').classList.remove('hidden'); hydrateUiFxControls(); }
+function closeUiFx(){ $('#uiFxMenu').classList.add('hidden'); }
+$('#uiFxBtn').addEventListener('click', openUiFx);
+$('#uiFxClose').addEventListener('click', closeUiFx);
+$('#uiFxMenu').addEventListener('click', e=>{
+  if(e.target===e.currentTarget) closeUiFx();
+});
+$('#themeList').addEventListener('click', e=>{
+  const p = e.target.closest('.pill'); if(!p) return;
+  const mode = p.dataset.theme;
+  applyUiFx(mode);
+  $$('#themeList .pill').forEach(x=>x.classList.toggle('active', x===p));
+  closeUiFx();
+});
+$('#fontList').addEventListener('click', e=>{
+  const p = e.target.closest('.pill'); if(!p) return;
+  const tag = p.dataset.font;
+  applyFonts(tag);
+  $$('#fontList .pill').forEach(x=>x.classList.toggle('active', x===p));
+  closeUiFx();
+});
+
+/* TEXT FX (all text blocks) */
+function applyTextTheme(theme){
+  const map = {
+    DEFAULT: {ink:'#d9e7ff', dim:'#7b93ad'},
+    PUREWHITE: {ink:'#ffffff', dim:'#cfd6df'},
+    ICEBLUE: {ink:'#cbe9ff', dim:'#9cc3dd'},
+    WARMAMBER: {ink:'#ffdca8', dim:'#d4b07a'},
+    ROSE: {ink:'#ffd0e6', dim:'#f39ac0'},
+    HIGHCON: {ink:'#eaf2ff', dim:'#8fb3ff'}
+  };
+  const v = map[theme] || map.DEFAULT;
+  document.documentElement.style.setProperty('--ink', v.ink);
+  document.documentElement.style.setProperty('--dim', v.dim);
+  localStorage.setItem('mh8_text_theme', theme);
+}
+function applyTextFonts(opts){
+  const {hfont,bfont,mfont} = opts;
+  if(hfont==='ORBITRON') document.documentElement.style.setProperty('--sans-head','"Orbitron", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif');
+  else if(hfont==='EXO2') document.documentElement.style.setProperty('--sans-head','"Exo 2", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif');
+  else document.documentElement.style.setProperty('--sans-head','var(--sans)');
+  if(bfont==='EXO2') document.documentElement.style.setProperty('--sans','"Exo 2", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif');
+  else document.documentElement.style.setProperty('--sans','Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif');
+  if(mfont==='JETMONO') document.documentElement.style.setProperty('--mono','"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace');
+  else document.documentElement.style.setProperty('--mono','ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace');
+  localStorage.setItem('mh8_text_hfont', hfont||'DEFAULT');
+  localStorage.setItem('mh8_text_bfont', bfont||'DEFAULT');
+  localStorage.setItem('mh8_text_mfont', mfont||'DEFAULT');
+}
+function hydrateTextFxControls(){
+  const theme = localStorage.getItem('mh8_text_theme') || 'DEFAULT';
+  const hfont = localStorage.getItem('mh8_text_hfont') || 'DEFAULT';
+  const bfont = localStorage.getItem('mh8_text_bfont') || 'DEFAULT';
+  const mfont = localStorage.getItem('mh8_text_mfont') || 'DEFAULT';
+  applyTextTheme(theme);
+  applyTextFonts({hfont,bfont,mfont});
+  $$('#textThemeList .pill').forEach(p=> p.classList.toggle('active', p.dataset.ttheme===theme));
+  $$('#textHeadList  .pill').forEach(p=> p.classList.toggle('active', p.dataset.hfont===hfont));
+  $$('#textBodyList  .pill').forEach(p=> p.classList.toggle('active', p.dataset.bfont===bfont));
+  $$('#textMonoList  .pill').forEach(p=> p.classList.toggle('active', p.dataset.mfont===mfont));
+}
+function openTextFx(){ $('#textFxMenu').classList.remove('hidden'); hydrateTextFxControls(); }
+function closeTextFx(){ $('#textFxMenu').classList.add('hidden'); }
+$('#textFxBtn').addEventListener('click', openTextFx);
+$('#textFxClose').addEventListener('click', closeTextFx);
+$('#textFxMenu').addEventListener('click', e=>{ if(e.target===e.currentTarget) closeTextFx(); });
+$('#textThemeList').addEventListener('click', e=>{
+  const p = e.target.closest('.pill'); if(!p) return;
+  applyTextTheme(p.dataset.ttheme);
+  $$('#textThemeList .pill').forEach(x=>x.classList.toggle('active', x===p));
+  closeTextFx();
+});
+$('#textHeadList').addEventListener('click', e=>{
+  const p = e.target.closest('.pill'); if(!p) return;
+  applyTextFonts({hfont:p.dataset.hfont, bfont: localStorage.getItem('mh8_text_bfont')||'DEFAULT', mfont: localStorage.getItem('mh8_text_mfont')||'DEFAULT'});
+  $$('#textHeadList .pill').forEach(x=>x.classList.toggle('active', x===p));
+  closeTextFx();
+});
+$('#textBodyList').addEventListener('click', e=>{
+  const p = e.target.closest('.pill'); if(!p) return;
+  applyTextFonts({hfont: localStorage.getItem('mh8_text_hfont')||'DEFAULT', bfont:p.dataset.bfont, mfont: localStorage.getItem('mh8_text_mfont')||'DEFAULT'});
+  $$('#textBodyList .pill').forEach(x=>x.classList.toggle('active', x===p));
+  closeTextFx();
+});
+$('#textMonoList').addEventListener('click', e=>{
+  const p = e.target.closest('.pill'); if(!p) return;
+  applyTextFonts({hfont: localStorage.getItem('mh8_text_hfont')||'DEFAULT', bfont: localStorage.getItem('mh8_text_bfont')||'DEFAULT', mfont:p.dataset.mfont});
+  $$('#textMonoList .pill').forEach(x=>x.classList.toggle('active', x===p));
+  closeTextFx();
+});
+
+/* =========================
+   AUDIO + WEB AUDIO GRAPH
+========================= */
+const audio = $('#audio');
+let ctx, srcNode, masterGain, eqFilters = [], analyser, analyserWave;
+let fxIn, fxOut, dryGain, wetGain;
+let rvConvolver, rvTone;
+let dlNode, dlFb;
+let chDelay, chOsc, chGain;
+let dsNode;
+let lofiLP, lofiHP, lofiSat;
+let waveVizCanvas, waveVizCtx2d, waveVizData, waveVizRaf;
+
+let current = -1;
+let shuffle = false, loopAll = false;
+let abA = null, abB = null;
+let library = [];
+let order = [];
+let draggingId = null;
+
+/* export-attachment payloads for A-B */
+let exportFxPayload = null;
+let exportEqPayload = null;
+
+/* IndexedDB for big files */
+const DB_NAME='mh8_echo_ultra_2026';
+const STORE='tracks';
+let db=null;
+
+function idbOpen(){
+  return new Promise((res)=>{
+    if(!('indexedDB' in window)) return res(null);
+    const req = indexedDB.open(DB_NAME,1);
+    req.onupgradeneeded = e=>{
+      const d = e.target.result;
+      if(!d.objectStoreNames.contains(STORE)){
+        d.createObjectStore(STORE, {keyPath:'id'});
+      }
+    };
+    req.onsuccess = ()=>{ db=req.result; res(db); };
+    req.onerror = ()=>res(null);
+  });
+}
+function idbPut(rec){
+  return new Promise(r=>{
+    if(!db) return r(false);
+    const tx=db.transaction(STORE,'readwrite'); tx.objectStore(STORE).put(rec);
+    tx.oncomplete=()=>r(true); tx.onerror=()=>r(false);
+  });
+}
+function idbGet(id){
+  return new Promise(r=>{
+    if(!db) return r(null);
+    const tx=db.transaction(STORE,'readonly'); const req=tx.objectStore(STORE).get(id);
+    req.onsuccess=()=>r(req.result||null); req.onerror=()=>r(null);
+  });
+}
+function idbClear(){
+  return new Promise(r=>{
+    if(!db) return r();
+    const tx=db.transaction(STORE,'readwrite'); tx.objectStore(STORE).clear();
+    tx.oncomplete=()=>r();
+  });
+}
+
+/* helper to fetch Blob for current track */
+async function getCurrentTrackBlob(){
+  if(current === -1) return null;
+  const rec = library[current];
+  if(!rec) return null;
+  const id = rec.id;
+  if(db){
+    const stored = await idbGet(id);
+    if(stored && stored.blob) return stored.blob;
+  }
+  if(audio.src){
+    try{
+      const res = await fetch(audio.src);
+      return await res.blob();
+    }catch(e){}
+  }
+  return null;
+}
+
+/* AudioBuffer -> WAV Blob */
+function audioBufferToWavBlob(buffer){
+  const numOfChan = buffer.numberOfChannels;
+  const sampleRate = buffer.sampleRate;
+  const samples = buffer.length;
+  const bytesPerSample = 2;
+  const blockAlign = numOfChan * bytesPerSample;
+  const bufferLength = 44 + samples * blockAlign;
+  const arrayBuffer = new ArrayBuffer(bufferLength);
+  const view = new DataView(arrayBuffer);
+  let offset = 0;
+  function writeString(s){ for(let i=0;i<s.length;i++){ view.setUint8(offset++, s.charCodeAt(i)); } }
+  function writeUint32(d){ view.setUint32(offset, d, true); offset += 4; }
+  function writeUint16(d){ view.setUint16(offset, d, true); offset += 2; }
+
+  writeString('RIFF');
+  writeUint32(bufferLength - 8);
+  writeString('WAVE');
+  writeString('fmt ');
+  writeUint32(16);
+  writeUint16(1);
+  writeUint16(numOfChan);
+  writeUint32(sampleRate);
+  writeUint32(sampleRate * blockAlign);
+  writeUint16(blockAlign);
+  writeUint16(bytesPerSample * 8);
+  writeString('data');
+  writeUint32(samples * blockAlign);
+
+  const channels = [];
+  for(let ch=0; ch<numOfChan; ch++) channels.push(buffer.getChannelData(ch));
+  for(let i=0;i<samples;i++){
+    for(let ch=0; ch<numOfChan; ch++){
+      let sample = channels[ch][i];
+      sample = Math.max(-1, Math.min(1, sample));
+      sample = sample < 0 ? sample * 0x8000 : sample * 0x7fff;
+      view.setInt16(offset, sample, true);
+      offset += 2;
+    }
+  }
+  return new Blob([arrayBuffer], {type:'audio/wav'});
+}
+
+/* Snapshot helpers for FX/EQ to attach to A-B export payload */
+function snapshotFxSettings(){
+  return {
+    mix: parseFloat($('#fxMix')?.value || '0'),
+    out: parseFloat($('#fxOut')?.value || '1'),
+    reverb: {
+      enabled: !!$('#fxReverb')?.checked,
+      size: parseFloat($('#rvSize')?.value || '0'),
+      tone: parseFloat($('#rvTone')?.value || '0')
+    },
+    delay: {
+      enabled: !!$('#fxDelay')?.checked,
+      time: parseFloat($('#dlTime')?.value || '0'),
+      feedback: parseFloat($('#dlFb')?.value || '0')
+    },
+    chorus: {
+      enabled: !!$('#fxChorus')?.checked,
+      rate: parseFloat($('#chRate')?.value || '0'),
+      depth: parseFloat($('#chDepth')?.value || '0')
+    },
+    drive: {
+      enabled: !!$('#fxDrive')?.checked,
+      amount: parseFloat($('#dsAmt')?.value || '0')
+    },
+    lofi: {
+      enabled: !!$('#fxLoFi')?.checked
+    },
+    bypassOn: ($('#fxByp')?.dataset.on === '1')
+  };
+}
+function snapshotEqSettings(){
+  const bands = $$('#eqRow input[type="range"]').map(el => +el.value || 0);
+  return {
+    bands,
+    labels: [60,170,310,600,1000,3000,6000,12000,14000,16000]
+  };
+}
+
+/* export A-B loop as WAV with metadata + clipboard */
+async function exportABLoop(){
+  if(current === -1){
+    flashLyricsMsg('No track selected');
+    return;
+  }
+  if(abA == null || abB == null || !audio.duration){
+    flashLyricsMsg('Set A and B loop points first');
+    return;
+  }
+  const start = Math.max(0, Math.min(abA, audio.duration));
+  const end = Math.max(0, Math.min(abB, audio.duration));
+  const length = end - start;
+  if(length <= 0.05){
+    flashLyricsMsg('Loop too short to export');
+    return;
+  }
+  const blob = await getCurrentTrackBlob();
+  if(!blob){
+    flashLyricsMsg('No audio data for export');
+    return;
+  }
+  flashLyricsMsg('Rendering A-B loop…');
+  const AC = window.AudioContext || window.webkitAudioContext;
+  const tmpCtx = new AC();
+  let decoded;
+  try{
+    const arrayBuffer = await blob.arrayBuffer();
+    decoded = await tmpCtx.decodeAudioData(arrayBuffer.slice(0));
+  }catch(e){
+    flashLyricsMsg('Decode failed');
+    try{ tmpCtx.close(); }catch(_){}
+    return;
+  }
+  const sr = decoded.sampleRate;
+  const ch = decoded.numberOfChannels;
+  const offline = new OfflineAudioContext(ch, Math.ceil(length * sr), sr);
+  const src = offline.createBufferSource();
+  src.buffer = decoded;
+  src.playbackRate.value = audio.playbackRate || 1;
+  src.connect(offline.destination);
+  src.start(0, start, length);
+  const rendered = await offline.startRendering();
+  try{ tmpCtx.close(); }catch(_){}
+  const wavBlob = audioBufferToWavBlob(rendered);
+  const baseName = (library[current]?.name || 'mh8_loop').replace(/\.[^.]+$/, '');
+  downloadBlob(wavBlob, baseName + '_ABloop.wav');
+
+  const meta = {
+    track: library[current]?.name || '',
+    from: start,
+    to: end,
+    loopSeconds: length,
+    playbackRate: audio.playbackRate || 1,
+    createdAt: new Date().toISOString()
+  };
+  if(exportFxPayload){
+    meta.fx = exportFxPayload;
+  }
+  if(exportEqPayload){
+    meta.eq = exportEqPayload;
+  }
+  const metaText = stableStringify(meta);
+  await copyTextToClipboard(metaText).catch(()=>{});
+  flashLyricsMsg('A-B loop exported (WAV + meta)');
+  showActionBubble('A-B LOOP WAV READY');
+
+  if(navigator.clipboard && window.ClipboardItem){
+    try{
+      const item = new ClipboardItem({'audio/wav': wavBlob});
+      await navigator.clipboard.write([item]);
+    }catch(e){}
+  }
+}
+
+/* Setup Audio Graph */
+function ensureCtx(){
+  if(ctx) return;
+  const AC = window.AudioContext || window.webkitAudioContext;
+  ctx = new AC();
+  srcNode = ctx.createMediaElementSource(audio);
+
+  masterGain = ctx.createGain(); masterGain.gain.value = 0.9;
+
+  fxIn = ctx.createGain();
+  fxOut = ctx.createGain();
+  dryGain = ctx.createGain(); dryGain.gain.value = 1;
+  wetGain = ctx.createGain(); wetGain.gain.value = 0;
+
+  const freqs = [60,170,310,600,1000,3000,6000,12000,14000,16000];
+  eqFilters = freqs.map((f,i)=>{
+    const biq = ctx.createBiquadFilter();
+    biq.type = i===0 ? 'lowshelf' : (i===freqs.length-1 ? 'highshelf' : 'peaking');
+    biq.frequency.value = f; biq.gain.value = 0; biq.Q.value = i===0||i===freqs.length-1 ? 0.7 : 1.0;
+    return biq;
+  });
+
+  analyser = ctx.createAnalyser(); analyser.fftSize = 2048; analyser.smoothingTimeConstant = .85;
+  analyserWave = ctx.createAnalyser(); analyserWave.fftSize = 2048; analyserWave.smoothingTimeConstant = .5;
+
+  srcNode.connect(masterGain); masterGain.connect(fxIn);
+
+  fxIn.connect(dryGain); dryGain.connect(fxOut);
+
+  wetGain.connect(fxOut);
+
+  let node = fxOut;
+  node.connect(eqFilters[0]);
+  for (let i=0;i<eqFilters.length-1;i++) eqFilters[i].connect(eqFilters[i+1]);
+  eqFilters[eqFilters.length-1].connect(analyser);
+  eqFilters[eqFilters.length-1].connect(analyserWave);
+  eqFilters[eqFilters.length-1].connect(ctx.destination);
+
+  setupLyricsFrame();
+  buildFxChain();
+  wireFx();
+  initWaveViz();
+}
+
+/* Right-side wave visualizer (safe no-op if no canvas) */
+function initWaveViz(){
+  waveVizCanvas = $('#waveViz');
+  if(!waveVizCanvas) return;
+  waveVizCtx2d = waveVizCanvas.getContext('2d');
+  waveVizData = new Uint8Array(2048);
+
+  function resize(){
+    const rect = waveVizCanvas.getBoundingClientRect();
+    const dpr = Math.max(1, window.devicePixelRatio||1);
+    waveVizCanvas.width = rect.width * dpr;
+    waveVizCanvas.height = rect.height * dpr;
+    waveVizCtx2d.setTransform(dpr,0,0,dpr,0,0);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  (function draw(){
+    waveVizRaf = requestAnimationFrame(draw);
+    if(!waveVizCtx2d) return;
+    const dpr = Math.max(1, window.devicePixelRatio||1);
+    const w = waveVizCanvas.width / dpr;
+    const h = waveVizCanvas.height / dpr;
+
+    waveVizCtx2d.clearRect(0,0,w,h);
+    waveVizCtx2d.lineWidth = 2;
+    waveVizCtx2d.strokeStyle = '#39ff14';
+    waveVizCtx2d.beginPath();
+
+    if(analyserWave){
+      analyserWave.getByteTimeDomainData(waveVizData);
+      const len = waveVizData.length;
+      for(let i=0;i<len;i++){
+        const x = (i/(len-1))*w;
+        const v = (waveVizData[i]-128)/128;
+        const y = (h/2) + v*(h*0.45);
+        if(i===0) waveVizCtx2d.moveTo(x,y);
+        else waveVizCtx2d.lineTo(x,y);
+      }
+    } else {
+      waveVizCtx2d.moveTo(0,h/2);
+      waveVizCtx2d.lineTo(w,h/2);
+    }
+    waveVizCtx2d.stroke();
+  })();
+}
+
+/* =========================
+   FX BUILDERS
+========================= */
+function makeReverbImpulse(sec=1.2, decay=2.2){
+  const rate = ctx.sampleRate, len = Math.floor(rate * sec);
+  const buf = ctx.createBuffer(2, len, rate);
+  for(let ch=0; ch<2; ch++){
+    const data = buf.getChannelData(ch);
+    for(let i=0;i<len;i++){ data[i] = (Math.random()*2 - 1) * Math.pow(1 - i/len, decay); }
+  }
+  return buf;
+}
+function makeDistCurve(amount=0){
+  const n = 44100, curve = new Float32Array(n);
+  const k = amount|0;
+  for (let i=0;i<n;i++){
+    const x = i*2/n - 1;
+    curve[i] = (1 + k) * x / (1 + k * Math.abs(x));
+  }
+  return curve;
+}
+function buildFxChain(){
+  if(!ctx) return;
+  try { fxIn.disconnect(); } catch(e){}
+  fxIn.connect(dryGain);
+
+  let wetStart = fxIn;
+
+  if($('#fxReverb').checked){
+    rvConvolver = rvConvolver || ctx.createConvolver();
+    rvConvolver.buffer = makeReverbImpulse(parseFloat($('#rvSize').value), 2.2);
+    rvTone = rvTone || ctx.createBiquadFilter(); rvTone.type='lowpass'; rvTone.frequency.value = parseFloat($('#rvTone').value);
+    wetStart = wetStart.connect(rvConvolver);
+    wetStart = rvConvolver.connect(rvTone);
+  }
+
+  if($('#fxDelay').checked){
+    dlNode = dlNode || ctx.createDelay(1.0);
+    dlNode.delayTime.value = parseFloat($('#dlTime').value);
+    dlFb = dlFb || ctx.createGain();
+    dlFb.gain.value = parseFloat($('#dlFb').value);
+    dlNode.connect(dlFb); dlFb.connect(dlNode);
+    wetStart = wetStart.connect(dlNode);
+  }
+
+  if($('#fxChorus').checked){
+    chDelay = chDelay || ctx.createDelay(0.05);
+    chGain = chGain || ctx.createGain();
+    chOsc = chOsc || ctx.createOscillator();
+    chGain.gain.value = parseFloat($('#chDepth').value);
+    chOsc.frequency.value = parseFloat($('#chRate').value);
+    chOsc.connect(chGain); chGain.connect(chDelay.delayTime);
+    if(!chOsc.started){ chOsc.start(); chOsc.started = true; }
+    wetStart = wetStart.connect(chDelay);
+  }
+
+  if($('#fxDrive').checked){
+    dsNode = dsNode || ctx.createWaveShaper();
+    dsNode.curve = makeDistCurve(parseFloat($('#dsAmt').value));
+    wetStart = wetStart.connect(dsNode);
+  }
+
+  if($('#fxLoFi').checked){
+    lofiHP = lofiHP || ctx.createBiquadFilter(); lofiHP.type='highpass'; lofiHP.frequency.value = 180;
+    lofiLP = lofiLP || ctx.createBiquadFilter(); lofiLP.type='lowpass'; lofiLP.frequency.value = 3200;
+    lofiSat = lofiSat || ctx.createWaveShaper(); lofiSat.curve = makeDistCurve(120);
+    wetStart = wetStart.connect(lofiHP); wetStart = lofiHP.connect(lofiLP); wetStart = lofiLP.connect(lofiSat);
+  }
+
+  try { wetStart.connect(wetGain); } catch(e){}
+  applyFxUi();
+}
+function applyFxUi(){
+  if(!ctx) return;
+  wetGain.gain.value = parseFloat($('#fxMix').value);
+  fxOut.gain.value = parseFloat($('#fxOut').value);
+  const bypass = $('#fxByp').dataset.on === '1';
+  if(bypass){ wetGain.gain.value = 0; dryGain.gain.value = 1; }
+  else { dryGain.gain.value = 1; }
+}
+function wireFx(){
+  ['fxMix','fxOut','rvSize','rvTone','dlTime','dlFb','chRate','chDepth','dsAmt'].forEach(id=>{
+    $('#'+id).addEventListener('input', ()=>{
+      ensureCtx();
+      if(id==='rvSize' && rvConvolver){ rvConvolver.buffer = makeReverbImpulse(parseFloat($('#rvSize').value), 2.2); }
+      if(id==='rvTone' && rvTone){ rvTone.frequency.value = parseFloat($('#rvTone').value); }
+      if(id==='dlTime' && dlNode){ dlNode.delayTime.value = parseFloat($('#dlTime').value); }
+      if(id==='dlFb' && dlFb){ dlFb.gain.value = parseFloat($('#dlFb').value); }
+      if(id==='chRate' && chOsc){ chOsc.frequency.value = parseFloat($('#chRate').value); }
+      if(id==='chDepth' && chGain){ chGain.gain.value = parseFloat($('#chDepth').value); }
+      if(id==='dsAmt' && dsNode){ dsNode.curve = makeDistCurve(parseFloat($('#dsAmt').value)); }
+      applyFxUi();
+    });
+  });
+  ['fxReverb','fxDelay','fxChorus','fxDrive','fxLoFi'].forEach(id=>{
+    $('#'+id).addEventListener('change', ()=>{ ensureCtx(); buildFxChain(); });
+  });
+  $('#fxByp').addEventListener('click', ()=>{
+    const on = $('#fxByp').dataset.on === '1';
+    $('#fxByp').dataset.on = on ? '0' : '1';
+    $('#fxByp').textContent = on ? 'BYPASS OFF' : 'BYPASS ON';
+    applyFxUi();
+  });
+}
+
+/* =========================
+   LYRICS IFRAME + CANVAS + BINDING
+========================= */
+const lyricsFrame = $('#lyricsFrame');
+const lyricsInput = $('#lyricsInput');
+const addLyricsBtn = $('#addLyrics');
+const bindLyricsBtn = $('#bindLyrics');
+const removeLyricsBtn = $('#removeLyrics');
+const masterClearBtn = $('#lyricsMasterClear');
+const lyricsFxBtn = $('#lyricsFx');
+const lyricsFontSelect = $('#lyricsFontSelect');
+const lyricsFontClearBtn = $('#lyricsFontClear');
+const lyricsSpeed = $('#lyricsSpeed');
+const lyricsSpeedLabel = $('#lyricsSpeedLabel');
+const tempoSyncBtn = $('#tempoSync');
+const tempoClearSyncBtn = $('#tempoClearSync');
+const lyricsMsg = $('#lyricsMsg');
+
+const clearCanvasBtn = $('#clearCanvas');
+const copyExportBtn = $('#copyExport');
+const exportSigilBtn = $('#exportSigil');
+const undoCanvasBtn = $('#undoCanvas');
+const redoCanvasBtn = $('#redoCanvas');
+const randomCanvasBtn = $('#randomCanvas');
+const bindDrawingBtn = $('#bindDrawing');
+const unbindDrawingBtn = $('#unbindDrawing');
+const addFxToExportBtn = $('#addFxToExport');
+const addEqToExportBtn = $('#addEqToExport');
+const paletteDiv = $('#palette');
+
+/* NEW: guard so iframe is only initialized once */
+let lyricsFrameInitialized = false;
+
+let lyricsDraft = '';
+let boundLyrics = {};
+const LYRICS_BOUND_KEY = 'mh8_echo_ultra_lyrics_bound';
+const LYRICS_FONT_KEY = 'mh8_lyrics_font';
+const LYRICS_SPEED_KEY = 'mh8_lyrics_speed';
+const LYRICS_TEMPO_KEY = 'mh8_lyrics_tempo_bpm';
+const TEMPO_BOUND_KEY = 'mh8_echo_ultra_tempo_bound';
+
+/* slowed scroll pace 25% */
+const SCROLL_PX_PER_BEAT = 11.25;
+
+function bpmToPxps(bpm){
+  bpm = Math.max(60, Math.min(180, Number(bpm)||120));
+  return bpm * SCROLL_PX_PER_BEAT / 60;
+}
+function pxpsToBpm(pxps){
+  pxps = Math.max(1, Number(pxps)||30);
+  return Math.max(60, Math.min(180, Math.round(pxps * 60 / SCROLL_PX_PER_BEAT)));
+}
+
+let lyricsTempoBpm = parseInt(localStorage.getItem(LYRICS_TEMPO_KEY)||'',10);
+if(!lyricsTempoBpm){
+  const legacyPxps = parseFloat(localStorage.getItem(LYRICS_SPEED_KEY)||'');
+  if(isFinite(legacyPxps)){
+    lyricsTempoBpm = pxpsToBpm(legacyPxps);
+    localStorage.setItem(LYRICS_TEMPO_KEY, String(lyricsTempoBpm));
+  } else {
+    lyricsTempoBpm = 120;
+  }
+}
+let lyricsSpeedVal = bpmToPxps(lyricsTempoBpm);
+
+let boundTempo = {};
+function loadBoundTempo(){
+  try { boundTempo = JSON.parse(localStorage.getItem(TEMPO_BOUND_KEY) || '{}') || {}; }
+  catch(e){ boundTempo = {}; }
+}
+function saveBoundTempo(){
+  localStorage.setItem(TEMPO_BOUND_KEY, JSON.stringify(boundTempo));
+}
+loadBoundTempo();
+
+function loadBoundLyrics(){
+  try { boundLyrics = JSON.parse(localStorage.getItem(LYRICS_BOUND_KEY) || '{}') || {}; }
+  catch(e){ boundLyrics = {}; }
+}
+function saveBoundLyrics(){
+  localStorage.setItem(LYRICS_BOUND_KEY, JSON.stringify(boundLyrics));
+}
+loadBoundLyrics();
+
+/* Drawings persistence */
+let boundDrawings = {};
+const DRAW_BOUND_KEY = 'mh8_echo_ultra_drawings_bound';
+
+function loadBoundDrawings(){
+  try { boundDrawings = JSON.parse(localStorage.getItem(DRAW_BOUND_KEY) || '{}') || {}; }
+  catch(e){ boundDrawings = {}; }
+}
+function saveBoundDrawings(){
+  localStorage.setItem(DRAW_BOUND_KEY, JSON.stringify(boundDrawings));
+}
+loadBoundDrawings();
+
+let lyricsFontTag = localStorage.getItem(LYRICS_FONT_KEY) || 'DEFAULT';
+if(lyricsFontSelect){ lyricsFontSelect.value = lyricsFontTag; }
+
+function flashLyricsMsg(t){
+  if(!lyricsMsg) return;
+  lyricsMsg.textContent = t;
+  clearTimeout(flashLyricsMsg._tm);
+  flashLyricsMsg._tm = setTimeout(()=> lyricsMsg.textContent='—', 1600);
+}
+
+/* attach FX/EQ to A-B export */
+if(addFxToExportBtn){
+  addFxToExportBtn.addEventListener('click', ()=>{
+    exportFxPayload = snapshotFxSettings();
+    flashLyricsMsg('FX attached to A-B export');
+    showActionBubble('FX LINKED TO A-B');
+  });
+}
+if(addEqToExportBtn){
+  addEqToExportBtn.addEventListener('click', ()=>{
+    exportEqPayload = snapshotEqSettings();
+    flashLyricsMsg('EQ attached to A-B export');
+    showActionBubble('EQ LINKED TO A-B');
+  });
+}
+
+function lyricsPost(type, payload={}){
+  if(!lyricsFrame || !lyricsFrame.contentWindow) return;
+  lyricsFrame.contentWindow.postMessage({type, ...payload}, '*');
+}
+
+/* Export bridge from iframe */
+let exportResolvers = {};
+window.addEventListener('message', e=>{
+  const m = e.data||{};
+  if(m.type==='EXPORT_DATA' && m.reqId && exportResolvers[m.reqId]){
+    exportResolvers[m.reqId](m);
+    delete exportResolvers[m.reqId];
+  }
+});
+function requestExport(){
+  return new Promise((resolve)=>{
+    const reqId = (crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now())+Math.random().toString(16).slice(2);
+    exportResolvers[reqId] = resolve;
+    lyricsPost('REQUEST_EXPORT', {reqId});
+  });
+}
+async function copyTextToClipboard(text){
+  try{
+    await navigator.clipboard.writeText(text);
+    return true;
+  }catch(e){
+    try{
+      const ta=document.createElement('textarea');
+      ta.value=text; ta.style.position='fixed'; ta.style.opacity='0';
+      document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
+      return true;
+    }catch(_){ return false; }
+  }
+}
+function downloadBlob(blob, filename){
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=filename;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 5000);
+}
+
+function applyTempo(bpm, persistGlobal=true){
+  lyricsTempoBpm = Math.max(60, Math.min(180, Math.round(Number(bpm)||120)));
+  lyricsSpeedVal = bpmToPxps(lyricsTempoBpm);
+  if(lyricsSpeed) lyricsSpeed.value = lyricsTempoBpm;
+  if(lyricsSpeedLabel) lyricsSpeedLabel.textContent = lyricsTempoBpm + ' BPM';
+  if(persistGlobal){
+    localStorage.setItem(LYRICS_TEMPO_KEY, String(lyricsTempoBpm));
+    localStorage.setItem(LYRICS_SPEED_KEY, String(lyricsSpeedVal));
+  }
+  lyricsPost('SET_SPEED', {speed: lyricsSpeedVal});
+}
+
+/* Palette */
+const NEON_PALETTE = ['#67e8f9','#ff00ff','#39ff14','#ff7a00','#a855f7','#00ffd5','#ff3b58','#ffe600'];
+let drawColor = localStorage.getItem('mh8_draw_color') || NEON_PALETTE[0];
+
+function applyDrawColor(c, persist=true){
+  drawColor = c;
+  if(persist) localStorage.setItem('mh8_draw_color', c);
+  lyricsPost('SET_COLOR', {color:c});
+  $$('#palette .swatch').forEach(b=> b.classList.toggle('active', b.dataset.color===c));
+}
+function buildPalette(){
+  if(!paletteDiv) return;
+  paletteDiv.innerHTML='';
+  NEON_PALETTE.forEach(c=>{
+    const b=document.createElement('button');
+    b.type='button';
+    b.className='swatch';
+    b.dataset.color=c;
+    b.style.background=c;
+    b.style.color=c;
+    b.title=c;
+    b.addEventListener('click', ()=>applyDrawColor(c,true));
+    paletteDiv.appendChild(b);
+  });
+  applyDrawColor(drawColor, false);
+}
+
+/* IFRAME HTML */
+const LYRICS_IFRAME_SRC = `<!doctype html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Exo+2:wght@500;700&family=JetBrains+Mono:wght@500;700&family=Rubik+Wet+Paint&display=swap" rel="stylesheet"/>
+<style>
+  html,body{margin:0;height:100%;background:#000;color:#e9f3ff;font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;}
+  #wrap{position:relative;height:100%;width:100%;overflow:hidden;}
+  #scroller{position:absolute;inset:0;overflow:auto;padding:12px 12px 80px 12px;scroll-behavior:auto;}
+  #lyrics{white-space:pre-wrap;line-height:1.5;font-size:14px;}
+  #draw{position:absolute;inset:0;touch-action:pan-y;}
+  .shade{position:sticky;bottom:0;height:40px;background:linear-gradient(180deg,transparent,#000);}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div id="scroller"><div id="lyrics"></div><div class="shade"></div></div>
+  <canvas id="draw"></canvas>
+</div>
+
+<script>
+  const scroller = document.getElementById('scroller');
+  const lyricsEl = document.getElementById('lyrics');
+  const canvas = document.getElementById('draw');
+  const dctx = canvas.getContext('2d');
+
+  let speed = 30; // px/sec
+  let playing = false;
+  let lastTs = null;
+
+  const FONT_MAP = {
+    DEFAULT: 'ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace',
+    EXO2: '"Exo 2", system-ui, sans-serif',
+    ORBITRON: '"Orbitron", system-ui, sans-serif',
+    JETMONO: '"JetBrains Mono", ui-monospace, monospace',
+    GRAFFITI: '"Rubik Wet Paint", system-ui, sans-serif'
+  };
+
+  const NEON = ['#67e8f9','#ff00ff','#39ff14','#ff7a00','#a855f7','#00ffd5','#ff3b58','#ffe600'];
+
+  let currentColor = '#67e8f9';
+  function setColor(c){
+    currentColor = c || currentColor;
+    dctx.strokeStyle = currentColor;
+  }
+
+  let undoStack = [], redoStack = [];
+
+  function resize(){
+    const r = canvas.getBoundingClientRect();
+    canvas.width = r.width;
+    canvas.height = r.height;
+    dctx.setTransform(1,0,0,1,0,0);
+    dctx.lineWidth = 2;
+    dctx.lineCap = 'round';
+    dctx.lineJoin = 'round';
+    dctx.strokeStyle = currentColor;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  function snapshot(resetRedo=true){
+    try{
+      undoStack.push(canvas.toDataURL('image/png'));
+      if(undoStack.length>100) undoStack.shift();
+      if(resetRedo) redoStack=[];
+    }catch(_){}
+  }
+  function restoreFrom(url){
+    if(!url){ clearDraw(true); return; }
+    const img = new Image();
+    img.onload = ()=>{
+      dctx.clearRect(0,0,canvas.width,canvas.height);
+      dctx.drawImage(img,0,0,canvas.width,canvas.height);
+    };
+    img.src = url;
+  }
+  function clearDraw(resetHistory=false){
+    dctx.clearRect(0,0,canvas.width,canvas.height);
+    if(resetHistory){
+      undoStack = [canvas.toDataURL('image/png')];
+      redoStack = [];
+    }
+  }
+  function undo(){
+    if(undoStack.length<=1) return;
+    const last = undoStack.pop();
+    redoStack.push(last);
+    restoreFrom(undoStack[undoStack.length-1]);
+  }
+  function redo(){
+    if(!redoStack.length) return;
+    const url = redoStack.pop();
+    undoStack.push(url);
+    restoreFrom(url);
+  }
+  function setDrawing(pngDataUrl, resetHistory=true){
+    if(!pngDataUrl){ clearDraw(resetHistory); return; }
+    const img = new Image();
+    img.onload = ()=>{
+      dctx.clearRect(0,0,canvas.width,canvas.height);
+      dctx.drawImage(img,0,0,canvas.width,canvas.height);
+      if(resetHistory){
+        undoStack = [canvas.toDataURL('image/png')];
+        redoStack = [];
+      } else {
+        snapshot(true);
+      }
+      dctx.strokeStyle = currentColor;
+      dctx.lineWidth = 2;
+    };
+    img.src = pngDataUrl;
+  }
+  function randomSigil(){
+    const w = canvas.width, h = canvas.height;
+    const cx = w/2, cy = h/2;
+    const count = 3 + Math.floor(Math.random()*5);
+    for(let i=0;i<count;i++){
+      const col = NEON[(Math.random()*NEON.length)|0];
+      dctx.strokeStyle = col;
+      dctx.lineWidth = 1.5 + Math.random()*3;
+      const kind = (Math.random()*4)|0;
+      dctx.beginPath();
+      if(kind===0){
+        const r = Math.min(w,h)*(0.08+Math.random()*0.25);
+        dctx.arc(cx+(Math.random()-0.5)*w*0.3, cy+(Math.random()-0.5)*h*0.3, r, 0, Math.PI*2);
+      } else if(kind===1){
+        const pts = 3 + (Math.random()*5|0);
+        dctx.moveTo(cx,cy);
+        for(let p=0;p<pts;p++){
+          dctx.lineTo(cx+(Math.random()-0.5)*w*0.9, cy+(Math.random()-0.5)*h*0.9);
+        }
+      } else if(kind===2){
+        const r = Math.min(w,h)*(0.1+Math.random()*0.3);
+        for(let a=0;a<3;a++){
+          const ang = (Math.PI*2/3)*a + Math.random()*0.3;
+          const x = cx + Math.cos(ang)*r;
+          const y = cy + Math.sin(ang)*r;
+          if(a===0) dctx.moveTo(x,y); else dctx.lineTo(x,y);
+        }
+        dctx.closePath();
+      } else {
+        const amp = h*(0.05+Math.random()*0.15);
+        const freq = 2 + (Math.random()*4|0);
+        const startX = Math.random()*w*0.2, endX = w*(0.8+Math.random()*0.2);
+        for(let x=startX; x<=endX; x+=w/60){
+          const t=(x-startX)/(endX-startX);
+          const y=cy + Math.sin(t*Math.PI*2*freq)*amp*(0.5+Math.random()*0.5);
+          if(x===startX) dctx.moveTo(x,y); else dctx.lineTo(x,y);
+        }
+      }
+      dctx.stroke();
+    }
+    dctx.strokeStyle = currentColor;
+    dctx.lineWidth = 2;
+    snapshot(true);
+  }
+
+  let drawing=false, last=null, strokeDirty=false;
+  function pt(e){
+    const rect = canvas.getBoundingClientRect();
+    return {x:e.clientX-rect.left, y:e.clientY-rect.top};
+  }
+  canvas.addEventListener('pointerdown', e=>{
+    drawing=true; strokeDirty=false; last=pt(e); canvas.setPointerCapture(e.pointerId);
+    canvas.style.touchAction='none';
+    scroller.style.overflow='hidden';
+  });
+  canvas.addEventListener('pointermove', e=>{
+    if(!drawing) return;
+    const p=pt(e);
+    dctx.beginPath(); dctx.moveTo(last.x,last.y); dctx.lineTo(p.x,p.y); dctx.stroke();
+    last=p; strokeDirty=true;
+  });
+  ['pointerup','pointercancel','pointerleave'].forEach(ev=>{
+    canvas.addEventListener(ev, e=>{
+      if(drawing && strokeDirty) snapshot(true);
+      drawing=false; last=null; strokeDirty=false;
+      scroller.style.overflow='auto';
+      canvas.style.touchAction='pan-y';
+      try{canvas.releasePointerCapture(e.pointerId)}catch(_){}
+    });
+  });
+
+  canvas.addEventListener('wheel', e=>{
+    scroller.scrollTop += e.deltaY;
+  }, {passive:true});
+
+  function setLyrics(text, resetTop=true){
+    lyricsEl.textContent = text || '';
+    if(resetTop) scroller.scrollTop = 0;
+  }
+  function setSpeed(v){
+    speed = Math.max(1, Number(v)||30);
+  }
+  function setFont(tag){
+    lyricsEl.style.fontFamily = FONT_MAP[tag] || FONT_MAP.DEFAULT;
+  }
+
+  function step(ts){
+    if(lastTs==null) lastTs=ts;
+    const dt = (ts-lastTs)/1000; lastTs=ts;
+    if(playing){
+      scroller.scrollTop += speed*dt;
+    }
+    requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+
+  clearDraw(true);
+
+  window.addEventListener('message', e=>{
+    const m = e.data||{};
+    if(m.type==='INIT'){
+      if(m.fontTag) setFont(m.fontTag);
+      if(m.speed) setSpeed(m.speed);
+      if(m.color) setColor(m.color);
+    }
+    if(m.type==='SET_LYRICS') setLyrics(m.text||'', m.resetTop!==false);
+    if(m.type==='SET_SPEED') setSpeed(m.speed);
+    if(m.type==='SET_FONT') setFont(m.fontTag);
+    if(m.type==='PLAY'){ playing=true; if(m.resetTop) scroller.scrollTop=0; }
+    if(m.type==='PAUSE') playing=false;
+    if(m.type==='STOP'){ playing=false; if(m.resetTop) scroller.scrollTop=0; }
+    if(m.type==='CLEAR_DRAW') clearDraw(true);
+    if(m.type==='CLEAR_ALL'){ setLyrics('',true); clearDraw(true); }
+    if(m.type==='SEEK_TOP') scroller.scrollTop=0;
+
+    if(m.type==='SET_COLOR') setColor(m.color);
+    if(m.type==='UNDO_DRAW') undo();
+    if(m.type==='REDO_DRAW') redo();
+    if(m.type==='RANDOM_DRAW') randomSigil();
+    if(m.type==='SET_DRAWING') setDrawing(m.pngDataUrl, m.resetHistory!==false);
+
+    if(m.type==='REQUEST_EXPORT'){
+      const pngDataUrl = canvas.toDataURL('image/png');
+      window.parent.postMessage({
+        type:'EXPORT_DATA',
+        reqId: m.reqId,
+        lyrics: lyricsEl.textContent||'',
+        pngDataUrl,
+        w: canvas.width,
+        h: canvas.height
+      }, '*');
+    }
+  });
+<\/script>
+</body>
+</html>`;
+
+/* iframe setup (NOW called on boot, guarded) */
+function setupLyricsFrame(){
+  if(!lyricsFrame || lyricsFrameInitialized) return;
+  lyricsFrameInitialized = true;
+  lyricsFrame.srcdoc = LYRICS_IFRAME_SRC;
+  lyricsFrame.addEventListener('load', ()=>{
+    lyricsPost('INIT', {fontTag: lyricsFontTag, speed: lyricsSpeedVal, color: drawColor});
+    loadLyricsForCurrent(false);
+    loadDrawingForCurrent(true, false);
+    if(lyricsDraft) lyricsPost('SET_LYRICS', {text: lyricsDraft, resetTop: false});
+  }, {once:true});
+}
+
+function loadLyricsForCurrent(resetTop=true){
+  if(current===-1) return;
+  const id = library[current]?.id;
+  if(!id) return;
+  const bound = boundLyrics[id];
+  if(bound){
+    lyricsDraft = bound;
+    if(lyricsInput) lyricsInput.value = bound;
+    lyricsPost('SET_LYRICS', {text: bound, resetTop});
+  } else {
+    if(resetTop) lyricsPost('SEEK_TOP');
+  }
+}
+function loadTempoForCurrent(){
+  if(current===-1) return;
+  const id = library[current]?.id;
+  if(!id) return;
+  const bpm = boundTempo[id];
+  if(bpm){
+    applyTempo(bpm, true);
+  }
+}
+function loadDrawingForCurrent(resetHistory=true, resetTopForSnapshot=true){
+  if(current===-1) return;
+  const id = library[current]?.id;
+  if(!id) return;
+  const bound = boundDrawings[id];
+  if(bound && bound.pngDataUrl){
+    lyricsPost('SET_DRAWING', {pngDataUrl: bound.pngDataUrl, resetHistory});
+    if(bound.lyrics && !boundLyrics[id]){
+      lyricsDraft = bound.lyrics;
+      if(lyricsInput) lyricsInput.value = bound.lyrics;
+      lyricsPost('SET_LYRICS', {text: bound.lyrics, resetTop: resetTopForSnapshot});
+    }
+  } else {
+    lyricsPost('CLEAR_DRAW');
+  }
+}
+
+/* wire lyrics controls */
+if(lyricsSpeed){
+  lyricsSpeed.value = lyricsTempoBpm;
+  if(lyricsSpeedLabel) lyricsSpeedLabel.textContent = lyricsTempoBpm + ' BPM';
+  lyricsSpeed.addEventListener('input', ()=>{
+    applyTempo(+lyricsSpeed.value, true);
+  });
+}
+if(addLyricsBtn){
+  addLyricsBtn.addEventListener('click', ()=>{
+    const text = (lyricsInput?.value||'').trim();
+    lyricsDraft = text;
+    lyricsPost('SET_LYRICS', {text, resetTop:true});
+    flashLyricsMsg(text ? 'Lyrics loaded' : 'Lyrics cleared');
+    showActionBubble(text ? 'LYRICS LOADED' : 'LYRICS CLEARED');
+  });
+}
+if(bindLyricsBtn){
+  bindLyricsBtn.addEventListener('click', ()=>{
+    if(current===-1){ flashLyricsMsg('No track selected'); return; }
+    const text = (lyricsInput?.value||lyricsDraft||'').trim();
+    const id = library[current]?.id;
+    if(!id){ flashLyricsMsg('No track'); return; }
+    if(!text){ flashLyricsMsg('Nothing to bind'); return; }
+    boundLyrics[id] = text;
+    saveBoundLyrics();
+    lyricsDraft = text;
+    lyricsPost('SET_LYRICS', {text, resetTop:false});
+    flashLyricsMsg('Lyrics bound to track');
+    showActionBubble('LYRICS BOUND');
+  });
+}
+if(removeLyricsBtn){
+  removeLyricsBtn.addEventListener('click', ()=>{
+    if(current===-1){ flashLyricsMsg('No track selected'); return; }
+    const id = library[current]?.id;
+    if(!id){ flashLyricsMsg('No track'); return; }
+    delete boundLyrics[id];
+    saveBoundLyrics();
+    lyricsDraft = '';
+    if(lyricsInput) lyricsInput.value='';
+    lyricsPost('SET_LYRICS', {text:'', resetTop:true});
+    lyricsPost('STOP', {resetTop:true});
+    flashLyricsMsg('Bound lyrics removed');
+    showActionBubble('LYRICS REMOVED');
+  });
+}
+if(masterClearBtn){
+  masterClearBtn.addEventListener('click', ()=>{
+    if(!confirm('Master clear ALL lyrics + bindings?')) return;
+    boundLyrics = {};
+    saveBoundLyrics();
+    lyricsDraft = '';
+    if(lyricsInput) lyricsInput.value='';
+    lyricsPost('CLEAR_ALL');
+    flashLyricsMsg('All lyrics cleared');
+    showActionBubble('ALL LYRICS CLEARED');
+  });
+}
+if(lyricsFxBtn){
+  lyricsFxBtn.addEventListener('click', ()=>{
+    const selected = (lyricsFontSelect && lyricsFontSelect.value) || lyricsFontTag || 'DEFAULT';
+    lyricsFontTag = selected;
+    localStorage.setItem(LYRICS_FONT_KEY, lyricsFontTag);
+    lyricsPost('SET_FONT', {fontTag: lyricsFontTag});
+
+    if(lyricsInput){
+      if(lyricsFontTag === 'EXO2'){ lyricsInput.style.fontFamily = '"Exo 2", system-ui, sans-serif'; }
+      else if(lyricsFontTag === 'ORBITRON'){ lyricsInput.style.fontFamily = '"Orbitron", system-ui, sans-serif'; }
+      else if(lyricsFontTag === 'JETMONO'){ lyricsInput.style.fontFamily = '"JetBrains Mono", ui-monospace, monospace'; }
+      else if(lyricsFontTag === 'GRAFFITI'){ lyricsInput.style.fontFamily = '"Rubik Wet Paint", system-ui, sans-serif'; }
+      else { lyricsInput.style.fontFamily = ''; }
+    }
+
+    flashLyricsMsg('Font FX: ' + lyricsFontTag);
+    showActionBubble('LYRICS FONT APPLIED');
+  });
+}
+if(lyricsFontClearBtn){
+  lyricsFontClearBtn.addEventListener('click', ()=>{
+    lyricsFontTag = 'DEFAULT';
+    localStorage.setItem(LYRICS_FONT_KEY, lyricsFontTag);
+    if(lyricsFontSelect) lyricsFontSelect.value = lyricsFontTag;
+    lyricsPost('SET_FONT', {fontTag: lyricsFontTag});
+    if(lyricsInput){ lyricsInput.style.fontFamily = ''; }
+    flashLyricsMsg('Font cleared');
+    showActionBubble('LYRICS FONT CLEARED');
+  });
+}
+
+/* Canvas controls */
+if(clearCanvasBtn){
+  clearCanvasBtn.addEventListener('click', ()=>{
+    lyricsPost('CLEAR_DRAW');
+    flashLyricsMsg('Canvas cleared');
+    showActionBubble('CANVAS CLEARED');
+  });
+}
+if(copyExportBtn){
+  copyExportBtn.addEventListener('click', async ()=>{
+    const data = await requestExport();
+    const payload = stableStringify({
+      lyrics: data.lyrics || '',
+      sigil_png: data.pngDataUrl || '',
+      w: data.w || 0,
+      h: data.h || 0,
+      timestamp: new Date().toISOString()
+    });
+    const ok = await copyTextToClipboard(payload);
+    if(ok){
+      flashLyricsMsg('Copied export payload');
+      showActionBubble('EXPORT PAYLOAD COPIED');
+    } else {
+      flashLyricsMsg('Copy failed');
+      showActionBubble('COPY FAILED');
+    }
+  });
+}
+if(exportSigilBtn){
+  exportSigilBtn.addEventListener('click', async ()=>{
+    const data = await requestExport();
+    const pngUrl = data.pngDataUrl;
+    if(pngUrl){
+      const a = document.createElement('a');
+      a.href = pngUrl;
+      a.download = 'mh8_sigil.png';
+      document.body.appendChild(a); a.click(); a.remove();
+    }
+    const w = data.w || 512, h = data.h || 512;
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><image href="${pngUrl}" width="${w}" height="${h}"/></svg>`;
+    downloadBlob(new Blob([svg], {type:'image/svg+xml'}), 'mh8_sigil.svg');
+    flashLyricsMsg('Sigil exported');
+    showActionBubble('SIGIL EXPORTED');
+  });
+}
+if(undoCanvasBtn){
+  undoCanvasBtn.addEventListener('click', ()=>{
+    lyricsPost('UNDO_DRAW');
+    flashLyricsMsg('Undo');
+    showActionBubble('UNDO STROKE');
+  });
+}
+if(redoCanvasBtn){
+  redoCanvasBtn.addEventListener('click', ()=>{
+    lyricsPost('REDO_DRAW');
+    flashLyricsMsg('Redo');
+    showActionBubble('REDO STROKE');
+  });
+}
+if(randomCanvasBtn){
+  randomCanvasBtn.addEventListener('click', ()=>{
+    lyricsPost('RANDOM_DRAW');
+    flashLyricsMsg('Random sigil dropped');
+    showActionBubble('RANDOM SIGIL');
+  });
+}
+if(bindDrawingBtn){
+  bindDrawingBtn.addEventListener('click', async ()=>{
+    if(current===-1){ flashLyricsMsg('No track selected'); return; }
+    const id = library[current]?.id;
+    if(!id){ flashLyricsMsg('No track'); return; }
+    const data = await requestExport();
+    if(!data.pngDataUrl){ flashLyricsMsg('No drawing to bind'); return; }
+    boundDrawings[id] = {
+      pngDataUrl: data.pngDataUrl,
+      lyrics: data.lyrics || '',
+      timestamp: new Date().toISOString()
+    };
+    saveBoundDrawings();
+    flashLyricsMsg('Drawing bound to track');
+    showActionBubble('DRAWING BOUND');
+  });
+}
+if(unbindDrawingBtn){
+  unbindDrawingBtn.addEventListener('click', ()=>{
+    if(current===-1){ flashLyricsMsg('No track selected'); return; }
+    const id = library[current]?.id;
+    if(!id){ flashLyricsMsg('No track'); return; }
+    delete boundDrawings[id];
+    saveBoundDrawings();
+    lyricsPost('CLEAR_DRAW');
+    flashLyricsMsg('Drawing unbound from track');
+    showActionBubble('DRAWING UNBOUND');
+  });
+}
+
+/* Tempo Sync controls */
+if(tempoSyncBtn){
+  tempoSyncBtn.addEventListener('click', ()=>{
+    if(current===-1){ flashLyricsMsg('No track selected'); return; }
+    const id = library[current]?.id;
+    if(!id){ flashLyricsMsg('No track'); return; }
+    boundTempo[id] = lyricsTempoBpm;
+    saveBoundTempo();
+    flashLyricsMsg('Tempo synced to track');
+    showActionBubble('TEMPO SYNCED TO TRACK');
+  });
+}
+if(tempoClearSyncBtn){
+  tempoClearSyncBtn.addEventListener('click', ()=>{
+    if(current===-1){
+      boundTempo = {};
+      saveBoundTempo();
+      flashLyricsMsg('All tempo sync cleared');
+      showActionBubble('ALL TEMPO SYNC CLEARED');
+      return;
+    }
+    const id = library[current]?.id;
+    if(!id){ flashLyricsMsg('No track'); return; }
+    delete boundTempo[id];
+    saveBoundTempo();
+    flashLyricsMsg('Tempo sync cleared for track');
+    showActionBubble('TEMPO SYNC CLEARED');
+  });
+}
+
+/* =========================
+   TRANSPORT + UI WIRING
+========================= */
+const progressFill = $('#progressFill');
+const progressMeter = $('#progressMeter');
+const btnPlay = $('#btnPlay');
+const btnPrev = $('#btnPrev');
+const btnNext = $('#btnNext');
+const btnShuffle = $('#btnShuffle');
+const btnLoop = $('#btnLoop');
+const btnStop = $('#btnStop');
+const vol = $('#vol');
+const rate = $('#rate');
+const rateLabel = $('#rateLabel');
+const rateOrigBtn = $('#rateOrig');
+const setA = $('#setA');
+const setB = $('#setB');
+const clearAB = $('#clearAB');
+const exportAB = $('#exportAB');
+const abInfo = $('#abInfo');
+const tCur = $('#tCur'), tTot = $('#tTot'), tRem = $('#tRem');
+
+function updateTimes(){
+  tCur.textContent = fmtTime(audio.currentTime||0);
+  tTot.textContent = fmtTime(audio.duration||0);
+  const rem = (audio.duration||0) - (audio.currentTime||0);
+  tRem.textContent = '(' + (rem ? '-' + fmtTime(rem) : '-0:00') + ')';
+  if(audio.duration){
+    const pct = (audio.currentTime / audio.duration) * 100;
+    progressFill.style.width = pct + '%';
+  }else{
+    progressFill.style.width = '0%';
+  }
+}
+audio.addEventListener('timeupdate', ()=>{
+  updateTimes();
+  if(abA!=null && abB!=null && audio.currentTime > abB - 0.02){
+    audio.currentTime = abA;
+  }
+});
+audio.addEventListener('loadedmetadata', updateTimes);
+audio.addEventListener('ended', ()=>{
+  if(abA!=null && abB!=null){ audio.currentTime = abA; audio.play(); return; }
+  next(true);
+});
+
+btnPlay.addEventListener('click', ()=> togglePlay());
+btnPrev.addEventListener('click', ()=> prev());
+btnNext.addEventListener('click', ()=> next());
+btnStop.addEventListener('click', ()=>{
+  audio.pause(); audio.currentTime=0; btnPlay.textContent='PLAY';
+  lyricsPost('STOP', {resetTop:true});
+});
+btnShuffle.addEventListener('click', ()=>{
+  shuffle = !shuffle;
+  btnShuffle.textContent = shuffle ? 'SHUFFLE ON' : 'SHUFFLE OFF';
+});
+btnLoop.addEventListener('click', ()=>{
+  loopAll = !loopAll;
+  btnLoop.textContent = loopAll ? 'LOOP ON' : 'LOOP OFF';
+});
+progressMeter.addEventListener('click', e=>{
+  const r = progressMeter.getBoundingClientRect();
+  const p = Math.min(1, Math.max(0, (e.clientX - r.left)/r.width));
+  if(audio.duration) audio.currentTime = p * audio.duration;
+});
+vol.addEventListener('input', ()=>{ ensureCtx(); masterGain.gain.value = +vol.value; });
+rate.addEventListener('input', ()=>{
+  audio.playbackRate = +rate.value;
+  rateLabel.textContent = (Math.round(audio.playbackRate*100)/100).toFixed(2)+'×';
+});
+['mouseup','touchend','mouseleave'].forEach(ev=>{
+  rate.addEventListener(ev, ()=>{
+    const v = +rate.value;
+    if(Math.abs(v-1) <= 0.02){ rate.value = 1; audio.playbackRate = 1; rateLabel.textContent='1.00×'; }
+  }, {passive:true});
+});
+rateOrigBtn.addEventListener('click', ()=>{ rate.value=1; audio.playbackRate=1; rateLabel.textContent='1.00×'; });
+
+setA.addEventListener('click', ()=>{
+  abA = audio.currentTime||0;
+  abInfo.textContent = `A: ${fmtTime(abA)}  B: ${abB!=null ? fmtTime(abB) : '—'}`;
+});
+setB.addEventListener('click', ()=>{
+  abB = audio.currentTime||0;
+  if(abA!=null && abB<abA){ const t=abA; abA=abB; abB=t; }
+  abInfo.textContent = `A: ${fmtTime(abA ?? 0)}  B: ${fmtTime(abB)}`;
+});
+clearAB.addEventListener('click', ()=>{ abA=null; abB=null; abInfo.textContent = 'A: —  B: —'; });
+if(exportAB){
+  exportAB.addEventListener('click', ()=>{ exportABLoop(); });
+}
+
+function togglePlay(){
+  ensureCtx();
+  if((!audio.src || current===-1) && order.length>0){
+    playByIndex(0);
+    return;
+  }
+  if(audio.paused){
+    audio.play(); btnPlay.textContent='PAUSE';
+    const resetTop = (audio.currentTime||0) < 0.05;
+    lyricsPost('PLAY', {resetTop});
+  }
+  else {
+    audio.pause(); btnPlay.textContent='PLAY';
+    lyricsPost('PAUSE');
+  }
+}
+function indexOfCurrent(){
+  return order.findIndex(id => id === (library[current]?.id));
+}
+function prev(){
+  if(order.length===0) return;
+  const idx = (indexOfCurrent() - 1 + order.length) % order.length;
+  playByIndex(idx, true);
+}
+function next(auto=false){
+  if(order.length===0) return;
+  let idx;
+  if(shuffle){
+    if(order.length>1){
+      do { idx = Math.floor(Math.random()*order.length); } while (idx===indexOfCurrent());
+    } else idx=0;
+  }else{
+    idx = (indexOfCurrent()+1) % order.length;
+  }
+  playByIndex(idx, auto);
+}
+
+/* Smooth fade between tracks */
+async function fadeTo(nextSrcCb){
+  ensureCtx();
+  const start = masterGain.gain.value;
+  const t = ctx.currentTime;
+  masterGain.gain.cancelScheduledValues(t);
+  masterGain.gain.setValueAtTime(start, t);
+  masterGain.gain.linearRampToValueAtTime(0.0, t + 0.12);
+  await new Promise(r=>setTimeout(r, 140));
+  nextSrcCb();
+  const t2 = ctx.currentTime;
+  masterGain.gain.setValueAtTime(0.0, t2);
+  masterGain.gain.linearRampToValueAtTime(+vol.value, t2 + 0.12);
+}
+
+/* =========================
+   LIBRARY / PLAYLIST
+========================= */
+const tracksDiv = $('#tracks');
+const trackCount = $('#trackCount');
+
+function renderPlaylist(){
+  tracksDiv.innerHTML = '';
+  trackCount.textContent = order.length;
+  const frag = document.createDocumentFragment();
+  order.forEach((id,i)=>{
+    const item = library.find(x=>x.id===id);
+    if(!item) return;
+    const row = document.createElement('div');
+    row.className = 'track' + (i===indexOfCurrent() ? ' now' : '');
+    row.draggable = true;
+    row.dataset.id = id;
+    row.innerHTML = `
+      <div class="name" style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; cursor:pointer">${item.name}</div>
+      <div class="drag">☰</div>
+      <div class="act">
+        <button class="btn neo play">Play</button>
+        <button class="btn err del">Del</button>
+      </div>
+      <div class="act">
+        <a class="btn" href="${item.blobUrl}" download="${encodeURIComponent(item.name)}">DL</a>
+      </div>
+    `;
+    const nameEl = row.querySelector('.name');
+    const playBtnEl = row.querySelector('.play');
+    const delBtnEl = row.querySelector('.del');
+    const dlLinkEl = row.querySelector('a.btn');
+
+    nameEl.onclick = ()=>{ playByIndex(i); showActionBubble('TRACK PLAY'); };
+    playBtnEl.onclick = ()=>{ playByIndex(i); showActionBubble('TRACK PLAY'); };
+    delBtnEl.onclick = ()=>{ removeById(id); showActionBubble('TRACK DELETED'); };
+    if(dlLinkEl){
+      dlLinkEl.onclick = ()=>{ showActionBubble('TRACK DOWNLOADED'); };
+    }
+
+    row.addEventListener('dragstart', e=>{ draggingId=id; e.dataTransfer.effectAllowed='move'; });
+    row.addEventListener('dragover', e=>{ e.preventDefault(); });
+    row.addEventListener('drop', e=>{
+      e.preventDefault();
+      const targetId = row.dataset.id;
+      reorder(draggingId, targetId);
+      draggingId=null;
+    });
+    frag.appendChild(row);
+  });
+  tracksDiv.appendChild(frag);
+  renderVault();
+}
+function reorder(srcId, dstId){
+  if(srcId===dstId) return;
+  const a = order.indexOf(srcId), b = order.indexOf(dstId);
+  if(a<0||b<0) return;
+  order.splice(b,0, ...order.splice(a,1));
+  persist();
+  renderPlaylist();
+}
+function removeById(id){
+  const idx = order.indexOf(id);
+  if(idx>=0) order.splice(idx,1);
+  const wasCurrent = (library[current]?.id === id);
+  if(boundTempo[id]!=null){ delete boundTempo[id]; saveBoundTempo(); }
+  if(boundDrawings[id]!=null){ delete boundDrawings[id]; saveBoundDrawings(); }
+  persist();
+  renderPlaylist();
+  if(wasCurrent){
+    current = -1;
+    if(order.length>0) playByIndex(Math.min(idx, order.length-1));
+    else { audio.pause(); audio.src=''; btnPlay.textContent='PLAY'; lyricsPost('STOP',{resetTop:true}); }
+  }
+}
+
+/* Smooth track selection by index */
+function playByIndex(i, auto=false){
+  const rec = library.find(x=>x.id===order[i]);
+  if(!rec) return;
+  current = library.findIndex(x=>x.id===rec.id);
+
+  loadLyricsForCurrent(true);
+  loadTempoForCurrent();
+  loadDrawingForCurrent(true, true);
+
+  fadeTo(()=>{
+    audio.src = rec.blobUrl;
+    audio.playbackRate = +rate.value || 1;
+    audio.play().catch(()=>{});
+    btnPlay.textContent='PAUSE';
+    lyricsPost('PLAY', {resetTop:true});
+    if('mediaSession' in navigator){
+      navigator.mediaSession.metadata = new MediaMetadata({title: rec.name, artist: 'AllChemicalBeatz', album:'MH8 Echo 2026'});
+    }
+    renderPlaylist();
+  });
+}
+
+/* addFiles */
+function addFiles(files){
+  const list = Array.from(files||[]);
+  if(list.length===0) return;
+  (async ()=>{
+    for(const f of list){
+      const type = f.type || '';
+      const name = f.name || '';
+      const okByMime = type.startsWith('audio') || type.startsWith('video');
+      const okByExt  = /\.(mp3|m4a|aac|flac|wav|aif|aiff|ogg|oga|opus|webm|mp4)$/i.test(name);
+      if(!okByMime && !okByExt) continue;
+
+      const id = (crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now())+Math.random().toString(16).slice(2);
+      const typ = type || (/\.(mp3)$/i.test(name) ? 'audio/mpeg' : (/\.(mp4|m4a)$/i.test(name) ? 'audio/mp4' : 'application/octet-stream'));
+      const blob = f.slice(0, f.size, typ);
+      const blobUrl = URL.createObjectURL(blob);
+      const rec = {id, name, size:f.size, type: typ, blobUrl};
+      try{ await idbPut({id, name, type: typ, blob}); }catch(_){}
+      library.push(rec);
+      order.push(id);
+
+      const isAudioTrack = typ.startsWith('audio') || /\.(mp3|m4a|aac|flac|wav|ogg|oga|opus)$/i.test(name);
+      if(isAudioTrack){
+        vaultAdd(id, true);
+      }
+    }
+    persist();
+    renderPlaylist();
+  })();
+}
+
+/* Export All Playlist (JSON with base64 tracks) */
+async function exportJSON(){
+  const records = await Promise.all(order.map(async id=>{
+    const libRec = library.find(x=>x.id===id);
+    const fromDb = await idbGet(id);
+    let b64;
+    if(fromDb && fromDb.blob){
+      const buf = await fromDb.blob.arrayBuffer();
+      b64 = btoa(String.fromCharCode(...new Uint8Array(buf)));
+    }else{
+      const r = await fetch(libRec.blobUrl); const bl=await r.arrayBuffer();
+      b64 = btoa(String.fromCharCode(...new Uint8Array(bl)));
+    }
+    return {name:libRec.name, type:libRec.type, data:b64};
+  }));
+  const out = stableStringify({mh8_echo_ultra_2026:true, tracks:records});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([out], {type:'application/json'}));
+  a.download = 'mh8_echo_2026_playlist.json';
+  a.click();
+  showActionBubble('PLAYLIST EXPORTED');
+}
+
+/* Persistence */
+function persist(){
+  localStorage.setItem('mh8_echo_ultra_meta', JSON.stringify({
+    order,
+    library: library.map(({id,name,type,blobUrl,size})=>({id,name,type,blobUrl,size}))
+  }));
+}
+async function restore(){
+  await idbOpen();
+  const meta = JSON.parse(localStorage.getItem('mh8_echo_ultra_meta')||'null');
+  if(meta && meta.library){
+    library = meta.library;
+    order = meta.order || library.map(x=>x.id);
+    for(const rec of library){
+      const fromDb = await idbGet(rec.id);
+      if(fromDb && fromDb.blob){
+        if(rec.blobUrl) URL.revokeObjectURL(rec.blobUrl);
+        rec.blobUrl = URL.createObjectURL(fromDb.blob);
+      }
+    }
+  }
+  renderPlaylist();
+}
+
+/* =========================
+   MINI VAULT
+========================= */
+const VAULT_KEY = 'mh8_echo_ultra_vault';
+const VAULT_MAX = 16;
+let vaultIds = [];
+const vaultTracksDiv = $('#vaultTracks');
+const vaultCountEl = $('#vaultCount');
+const vaultMsgEl = $('#vaultMsg');
+
+function loadVault(){
+  try{
+    vaultIds = JSON.parse(localStorage.getItem(VAULT_KEY) || '[]') || [];
+  }catch(e){
+    vaultIds = [];
+  }
+}
+function saveVault(){
+  localStorage.setItem(VAULT_KEY, JSON.stringify(vaultIds));
+}
+function pruneVault(){
+  if(!library || !library.length){
+    if(vaultIds.length){
+      vaultIds = [];
+      saveVault();
+    }
+    return;
+  }
+  const alive = new Set(library.map(r=>r.id));
+  const filtered = vaultIds.filter(id => alive.has(id));
+  if(filtered.length !== vaultIds.length){
+    vaultIds = filtered;
+    saveVault();
+  }
+}
+function renderVault(){
+  if(!vaultTracksDiv) return;
+  pruneVault();
+  vaultTracksDiv.innerHTML = '';
+  let count = 0;
+  if(vaultIds && vaultIds.length){
+    vaultIds.forEach(id=>{
+      const rec = library.find(x=>x.id===id);
+      if(!rec) return;
+      count++;
+      const row = document.createElement('div');
+      row.className = 'track' + ((library[current]?.id===id)?' now':'');
+      row.innerHTML = `
+        <div class="name" style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; cursor:pointer">${rec.name}</div>
+        <div class="act">
+          <button class="btn neo vault-play">Play</button>
+          <button class="btn vault-add">Add to Playlist</button>
+          <button class="btn err vault-remove">Remove</button>
+        </div>
+        <div class="act">
+          <a class="btn" href="${rec.blobUrl}" download="${encodeURIComponent(rec.name)}">DL</a>
+        </div>
+      `;
+      const nameEl   = row.querySelector('.name');
+      const playBtn  = row.querySelector('.vault-play');
+      const addBtn   = row.querySelector('.vault-add');
+      const removeBtn= row.querySelector('.vault-remove');
+      const dlBtn    = row.querySelector('a.btn');
+
+      const playFn = ()=>{ playTrackId(id); showActionBubble('VAULT PLAY'); };
+      const addFn = ()=>{
+        if(!order.includes(id)){
+          order.push(id);
+          persist();
+          renderPlaylist();
+        }
+        showActionBubble('ADDED FROM VAULT');
+      };
+
+      if(nameEl)   nameEl.onclick = playFn;
+      if(playBtn)  playBtn.onclick = playFn;
+      if(addBtn)   addBtn.onclick = addFn;
+      if(removeBtn) removeBtn.onclick = ()=>{ vaultRemove(id); showActionBubble('REMOVED FROM VAULT'); };
+      if(dlBtn)    dlBtn.onclick = ()=> showActionBubble('VAULT DOWNLOAD');
+
+      vaultTracksDiv.appendChild(row);
+    });
+  }
+  if(vaultCountEl) vaultCountEl.textContent = (count || 0) + ' / ' + VAULT_MAX;
+  if(vaultMsgEl){
+    if(count===0) vaultMsgEl.textContent = 'Mini Vault is empty. Import audio to auto-pin up to 16 tracks.';
+    else if(count >= VAULT_MAX) vaultMsgEl.textContent = 'Mini Vault full — remove a track if you need more storage.';
+    else vaultMsgEl.textContent = 'Slots used: '+count+' / '+VAULT_MAX;
+  }
+}
+function vaultAdd(id, fromImport){
+  if(!id) return;
+  if(vaultIds.includes(id)){
+    renderVault();
+    return;
+  }
+  if(vaultIds.length >= VAULT_MAX){
+    if(fromImport){
+      showActionBubble('MINI VAULT FULL — NEED MORE STORAGE');
+    }
+    if(vaultMsgEl){
+      vaultMsgEl.textContent = 'Mini Vault full — remove a track to free space.';
+      setTimeout(()=>{
+        if(vaultMsgEl.textContent.startsWith('Mini Vault full')){
+          vaultMsgEl.textContent = 'Slots used: ' + vaultIds.length + ' / ' + VAULT_MAX;
+        }
+      }, 2000);
+    }
+    return;
+  }
+  vaultIds.push(id);
+  saveVault();
+  renderVault();
+  if(fromImport){
+    showActionBubble('TRACK STORED IN VAULT');
+  }
+}
+function vaultRemove(id){
+  const idx = vaultIds.indexOf(id);
+  if(idx<0) return;
+  vaultIds.splice(idx,1);
+  saveVault();
+  renderVault();
+}
+function playTrackId(id){
+  const libIdx = library.findIndex(x=>x.id===id);
+  if(libIdx<0) return;
+  let idx = order.indexOf(id);
+  if(idx === -1){
+    order.push(id);
+    persist();
+    renderPlaylist();
+    idx = order.length - 1;
+  }
+  playByIndex(idx);
+}
+
+/* Import hooks */
+const drop = $('#drop'), fileInput = $('#file');
+drop.addEventListener('dragover', e=>{ e.preventDefault(); drop.style.borderColor = '#ff00ff'; });
+drop.addEventListener('dragleave', ()=>{ drop.style.borderColor = '#39ff14'; });
+drop.addEventListener('drop', e=>{
+  e.preventDefault(); e.stopPropagation(); drop.style.borderColor = '#39ff14';
+  const dt = e.dataTransfer;
+  if(dt && dt.items && dt.items.length){
+    const files = [];
+    for(const it of dt.items){
+      if(it.kind==='file'){
+        const f = it.getAsFile();
+        if(f) files.push(f);
+      }
+    }
+    addFiles(files);
+  } else if (dt && dt.files && dt.files.length){
+    addFiles(dt.files);
+  }
+});
+drop.addEventListener('click', ()=> fileInput.click());
+fileInput.addEventListener('change', e=> addFiles(e.target.files));
+['dragover','drop'].forEach(evt=>{
+  document.addEventListener(evt, e=>{
+    if(!e.target.closest || !e.target.closest('#drop')){
+      e.preventDefault();
+    }
+  });
+});
+
+$('#exportJson').addEventListener('click', exportJSON);
+$('#wipeAll').addEventListener('click', async ()=>{
+  if(!confirm('Wipe entire library?')) return;
+  localStorage.removeItem('mh8_echo_ultra_meta');
+  await idbClear();
+  library = []; order = []; current=-1;
+  audio.pause(); audio.src=''; $('#btnPlay').textContent='PLAY';
+
+  boundLyrics = {}; saveBoundLyrics();
+  lyricsDraft=''; if(lyricsInput) lyricsInput.value='';
+  boundTempo = {}; saveBoundTempo();
+  boundDrawings = {}; saveBoundDrawings();
+  vaultIds = []; saveVault(); renderVault();
+  lyricsPost('CLEAR_ALL');
+  renderPlaylist();
+  showActionBubble('LIBRARY WIPED');
+});
+
+/* Shortcuts + Media Session */
+document.addEventListener('keydown', e=>{
+  if(e.target && ['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName)) return;
+  if(e.key===' ') { e.preventDefault(); togglePlay(); }
+  else if(e.key==='ArrowRight'){ audio.currentTime = Math.min(audio.duration||0, (audio.currentTime||0)+5); }
+  else if(e.key==='ArrowLeft'){ audio.currentTime = Math.max(0, (audio.currentTime||0)-5); }
+  else if(e.key==='ArrowUp'){ ensureCtx(); masterGain.gain.value = Math.min(1, masterGain.gain.value + 0.05); vol.value = masterGain.gain.value.toFixed(2); }
+  else if(e.key==='ArrowDown'){ ensureCtx(); masterGain.gain.value = Math.max(0, masterGain.gain.value - 0.05); vol.value = masterGain.gain.value.toFixed(2); }
+  else if(e.key==='s' || e.key==='S'){ shuffle=!shuffle; btnShuffle.textContent = shuffle?'SHUFFLE ON':'SHUFFLE OFF'; }
+  else if(e.key==='l' || e.key==='L'){ loopAll=!loopAll; btnLoop.textContent = loopAll?'LOOP ON':'LOOP OFF'; }
+  else if(e.key==='+'){ audio.playbackRate = Math.min(2, (audio.playbackRate||1) + 0.05); rate.value = audio.playbackRate; rateLabel.textContent=(Math.round(audio.playbackRate*100)/100).toFixed(2)+'×'; }
+  else if(e.key==='-'){ audio.playbackRate = Math.max(0.5, (audio.playbackRate||1) - 0.05); rate.value = audio.playbackRate; rateLabel.textContent=(Math.round(audio.playbackRate*100)/100).toFixed(2)+'×'; }
+  else if(e.key==='a' || e.key==='A'){
+    abA = audio.currentTime||0;
+    abInfo.textContent = `A: ${fmtTime(abA)}  B: ${fmtTime(abB!=null ? abB : 0)}`;
+  }
+  else if(e.key==='b' || e.key==='B'){
+    abB = audio.currentTime||0;
+    if(abA!=null && abB<abA){ const t=abA; abA=abB; abB=t; }
+    abInfo.textContent = `A: ${fmtTime(abA ?? 0)}  B: ${fmtTime(abB)}`;
+  }
+  else if(e.key==='Escape'){ abA=null; abB=null; abInfo.textContent = 'A: —  B: —'; }
+  else if(e.key==='Delete'){ const idx = indexOfCurrent(); if(idx>=0) removeById(order[idx]); }
+});
+let touchStartX=null;
+$('#app-bar').addEventListener('touchstart', e=>{ touchStartX = e.touches[0].clientX; }, {passive:true});
+$('#app-bar').addEventListener('touchend', e=>{
+  if(touchStartX==null) return;
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  if(Math.abs(dx)>60){ dx<0 ? next() : prev(); }
+  touchStartX = null;
+}, {passive:true});
+
+if('mediaSession' in navigator){
+  navigator.mediaSession.setActionHandler('play', ()=>{ togglePlay(); });
+  navigator.mediaSession.setActionHandler('pause', ()=>{ togglePlay(); });
+  navigator.mediaSession.setActionHandler('previoustrack', ()=> prev());
+  navigator.mediaSession.setActionHandler('nexttrack', ()=> next());
+  navigator.mediaSession.setActionHandler('seekbackward', (d)=>{ audio.currentTime = Math.max(0, (audio.currentTime||0)-(d?.seekOffset||5)); });
+  navigator.mediaSession.setActionHandler('seekforward', (d)=>{ audio.currentTime = Math.min(audio.duration||0, (audio.currentTime||0)+(d?.seekOffset||5)); });
+}
+
+/* =========================
+   PROGRESS TICK
+========================= */
+setInterval(updateTimes, 250);
+
+/* =========================
+   ARCHETYPE MINTING (Mini Vault CTKLT Genesis)
+========================= */
+const GENESIS_HASH_KEY = 'MH8_G1_HASH_ROOT';
+const GENESIS_WORKER_ENDPOINT = 'https://your-cf-worker-domain.com/api/provision/mint'; // UPDATE to live Worker
+let genesisKeypair = null;
+let lastGenesisReceipt = null;
+
+function ensureGenesisKeypair(){
+  if(genesisKeypair) return;
+  try{
+    const placeholderSecret = new Uint8Array(64); // demo only — replace with device-bound secret
+    genesisKeypair = nacl.sign.keyPair.fromSecretKey(placeholderSecret);
+  } catch(e){
+    genesisKeypair = nacl.sign.keyPair();
+  }
+}
+async function getFortifiedKeypair(){
+  ensureGenesisKeypair();
+  return genesisKeypair.secretKey;
+}
+function embedGenesisHash(hash){
+  try{
+    if(!localStorage.getItem(GENESIS_HASH_KEY)){
+      localStorage.setItem(GENESIS_HASH_KEY, hash);
+      console.log('Genesis hash embedded:', hash);
+    } else {
+      console.log('Genesis hash already present; keeping original root.');
+    }
+  } catch(e){
+    console.error('Failed to embed genesis hash', e);
+  }
+}
+function isUIMinted(){
+  return localStorage.getItem(GENESIS_HASH_KEY);
+}
+function u8ToBase64(u8){
+  let s=''; for(let i=0;i<u8.length;i++) s+=String.fromCharCode(u8[i]); return btoa(s);
+}
+async function generateGenesisHash(purchaseKey, name, message){
+  const secretKey = await getFortifiedKeypair();
+  const dataToSign = `${purchaseKey}|${name}|${message}`;
+  const msgUint8 = new TextEncoder().encode(dataToSign);
+  const hashBytes = nacl.sign.detached(msgUint8, secretKey);
+  const hashB64 = u8ToBase64(hashBytes);
+  const jsonReceipt = {
+    genesis_hash: hashB64,
+    owner_name: name,
+    custom_message: message,
+    purchase_key: purchaseKey,
+    timestamp: new Date().toISOString()
+  };
+  return {hashB64, jsonReceipt};
+}
+async function registerVaultID(jsonReceipt){
+  const res = await fetch(GENESIS_WORKER_ENDPOINT, {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify(jsonReceipt)
+  });
+  if(!res.ok){
+    const body = await res.text();
+    throw new Error(`CF Worker Registration failed. Status: ${res.status}. Message: ${body.substring(0,100)}...`);
+  }
+  return res.json().catch(()=> ({}));
+}
+function showMessage(text, type){
+  const box = document.getElementById('message-container');
+  if(!box) return;
+  let color = '#cfe7ff';
+  if(type==='error') color='#ff3b58';
+  else if(type==='success') color='#21e6a1';
+  box.textContent = text;
+  box.style.color = color;
+}
+function copyToClipboard(text){
+  if(!text){ showMessage('Nothing to copy yet.', 'error'); return; }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(()=>{
+      showMessage('JSON Receipt copied to clipboard.', 'success');
+    }).catch(()=>{
+      fallbackCopy(text);
+    });
+  } else {
+    fallbackCopy(text);
+  }
+  function fallbackCopy(t){
+    try{
+      const ta=document.createElement('textarea');
+      ta.value=t;
+      ta.style.position='fixed';
+      ta.style.opacity='0';
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      ta.remove();
+      showMessage('JSON Receipt copied to clipboard.', 'success');
+    }catch(e){
+      console.error(e);
+      showMessage('Clipboard copy failed on this device.', 'error');
+    }
+  }
+}
+
+/* NEW: CLEAR the minting station for future archetypes */
+function clearMintingStation(){
+  const pre = document.getElementById('jsonReceiptDisplay');
+  const rc = document.getElementById('receipt-container');
+  const form = document.getElementById('minting-form-fields');
+  const purchaseKeyEl = document.getElementById('purchaseKeyInput');
+  const ownerNameEl = document.getElementById('ownerNameInput');
+  const msgEl = document.getElementById('ctkltMessageInput');
+
+  if(pre) pre.textContent = '';
+  if(rc) rc.classList.add('hidden');
+  if(form) form.classList.remove('hidden');
+  if(purchaseKeyEl) purchaseKeyEl.value = '';
+  if(ownerNameEl) ownerNameEl.value = '';
+  if(msgEl) msgEl.value = '';
+
+  lastGenesisReceipt = null;
+  showMessage('Minting station cleared. Ready for new archetype.', 'info');
+  showActionBubble('MINTING STATION CLEARED');
+}
+
+/* UPDATED: keep form usable after genesis; only display hash */
+function launchPlayer(hash){
+  const hashEl = document.getElementById('permanentHashDisplay');
+  if(hashEl){
+    hashEl.classList.remove('hidden');
+    hashEl.innerHTML = `<span class="tlabel">Vault Archetype G1 Hash</span><br><span class="help" style="color:#39ff14;word-wrap:break-word;">${hash}</span>`;
+  }
+  showMessage('Mini Vault genesis hash detected for this device. You can continue minting additional archetypes.', 'success');
+}
+async function handleMintAndLaunch(){
+  const purchaseKeyEl = document.getElementById('purchaseKeyInput');
+  const ownerNameEl = document.getElementById('ownerNameInput');
+  const msgEl = document.getElementById('ctkltMessageInput');
+  const btn = document.getElementById('mintAndLaunchButton');
+  if(!purchaseKeyEl || !ownerNameEl || !msgEl || !btn) return;
+
+  const purchaseKey = purchaseKeyEl.value.trim();
+  const name = ownerNameEl.value.trim();
+  const message = msgEl.value.trim();
+
+  if(!purchaseKey || !name || !message){
+    showMessage('Please fill in Purchase Key, Owner Name, and CTKLT Message.', 'error');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Minting…';
+
+  try{
+    const {hashB64, jsonReceipt} = await generateGenesisHash(purchaseKey, name, message);
+    lastGenesisReceipt = jsonReceipt;
+
+    const pre = document.getElementById('jsonReceiptDisplay');
+    const rc = document.getElementById('receipt-container');
+    if(pre){
+      pre.textContent = JSON.stringify(jsonReceipt, null, 2);
+    }
+    if(rc) rc.classList.remove('hidden');
+
+    await registerVaultID(jsonReceipt);
+    embedGenesisHash(hashB64);
+    launchPlayer(hashB64);
+    showMessage('Archetype minted and registered.', 'success');
+    showActionBubble('ARCHETYPE MINTED');
+  }catch(err){
+    console.error(err);
+    showMessage(`Minting Failed: ${err.message}`, 'error');
+  }finally{
+    btn.disabled = false;
+    btn.textContent = 'MINT ARCHETYPE';
+  }
+}
+function initGenesisMintUI(){
+  const btn = document.getElementById('mintAndLaunchButton');
+  if(btn){
+    btn.addEventListener('click', handleMintAndLaunch);
+  }
+  const exportBtn = document.getElementById('mintExportJsonButton');
+  if(exportBtn){
+    exportBtn.addEventListener('click', ()=>{
+      if(!lastGenesisReceipt){
+        showMessage('Mint an archetype before exporting JSON.', 'error');
+        return;
+      }
+      const data = stableStringify(lastGenesisReceipt);
+      downloadBlob(new Blob([data], {type:'application/json'}), 'mh8_genesis_archetype_receipt.json');
+      showMessage('JSON receipt downloaded.', 'info');
+      showActionBubble('ARCHETYPE JSON EXPORTED');
+    });
+  }
+  const clearBtn = document.getElementById('mintClearButton');
+  if(clearBtn){
+    clearBtn.addEventListener('click', clearMintingStation);
+  }
+  const existing = isUIMinted();
+  if(existing){
+    launchPlayer(existing);
+  }
+}
+
+/* =========================
+   EQUALIZER UI + PRESETS
+========================= */
+const EQ_PRESETS = {
+  FLAT:    [0,0,0,0,0,0,0,0,0,0],
+  BASS:    [6,4,3,2,1,0,-2,-3,-4,-5],
+  TREBLE:  [-3,-2,-1,0,1,2,4,5,6,6],
+  VOCAL:   [-2,-1,0,2,4,3,1,0,-1,-2],
+  POP:     [3,2,1,1,0,1,2,3,3,2],
+  RAP:     [5,4,3,1,0,1,2,3,4,5],
+  METAL:   [5,4,3,1,-1,1,3,4,5,6],
+  CLARITY: [-2,-1,0,2,4,3,1,0,-1,-2]
+};
+const EQ_USER_KEY = 'mh8_echo_ultra_eq_user_presets';
+let eqUserPresets = {};
+
+function loadUserEqPresets(){
+  try{ eqUserPresets = JSON.parse(localStorage.getItem(EQ_USER_KEY) || '{}') || {}; }
+  catch(e){ eqUserPresets = {}; }
+}
+function saveUserEqPresets(){
+  localStorage.setItem(EQ_USER_KEY, JSON.stringify(eqUserPresets));
+}
+function applyEqGains(gains){
+  ensureCtx();
+  const sliders = $$('#eqRow input[type="range"]');
+  sliders.forEach((el,idx)=>{
+    const v = gains[idx] ?? 0;
+    el.value = v;
+    if(eqFilters[idx]) eqFilters[idx].gain.value = v;
+    const lbl = $('#eqg'+idx);
+    if(lbl) lbl.textContent = v + ' dB';
+  });
+}
+function hydrateUserEqPresets(){
+  loadUserEqPresets();
+  const sel = $('#eqUserSelect');
+  if(!sel) return;
+  sel.innerHTML = '<option value="">(none saved)</option>';
+  Object.keys(eqUserPresets).sort().forEach(name=>{
+    const opt=document.createElement('option');
+    opt.value=name;
+    opt.textContent=name;
+    sel.appendChild(opt);
+  });
+  const msg = $('#eqUserMsg');
+  if(msg) msg.textContent = Object.keys(eqUserPresets).length ? 'User EQ presets available.' : '—';
+}
+function buildEq(){
+  const container = $('#eqRow');
+  if(!container) return;
+  container.innerHTML='';
+  const freqs = [60,170,310,600,1000,3000,6000,12000,14000,16000];
+  freqs.forEach((f,i)=>{
+    const d = document.createElement('div');
+    d.className='col';
+    d.innerHTML = `
+      <label>${f} Hz</label>
+      <input type="range" min="-18" max="18" step="0.5" value="0" data-i="${i}"/>
+      <div class="help" id="eqg${i}">0 dB</div>
+    `;
+    const slider = d.querySelector('input');
+    slider.addEventListener('input', e=>{
+      ensureCtx();
+      const v = +e.target.value;
+      if(eqFilters[i]) eqFilters[i].gain.value = v;
+      const lbl = $('#eqg'+i);
+      if(lbl) lbl.textContent = v + ' dB';
+    });
+    container.appendChild(d);
+  });
+
+  const map = [
+    ['eqFlat','FLAT'],
+    ['eqBass','BASS'],
+    ['eqTreble','TREBLE'],
+    ['eqVocal','VOCAL'],
+    ['eqPop','POP'],
+    ['eqRap','RAP'],
+    ['eqMetal','METAL'],
+    ['eqClarity','CLARITY']
+  ];
+  map.forEach(([id,key])=>{
+    const btn = $('#'+id);
+    if(btn){
+      btn.addEventListener('click', ()=>{
+        const gains = EQ_PRESETS[key];
+        if(gains) applyEqGains(gains);
+        showActionBubble('EQ: '+key);
+      });
+    }
+  });
+
+  hydrateUserEqPresets();
+}
+
+/* wire EQ user preset buttons */
+const eqSaveUserBtn = $('#eqSaveUser');
+const eqUserLoadBtn = $('#eqUserLoad');
+const eqUserDelBtn = $('#eqUserDel');
+const eqUserMsg = $('#eqUserMsg');
+const eqUserSelect = $('#eqUserSelect');
+
+if(eqSaveUserBtn){
+  eqSaveUserBtn.addEventListener('click', ()=>{
+    const name = prompt('Name this EQ preset:','MY-EQ');
+    if(!name) return;
+    const gains = $$('#eqRow input[type="range"]').map(el => +el.value || 0);
+    eqUserPresets[name] = gains;
+    saveUserEqPresets();
+    hydrateUserEqPresets();
+    if(eqUserMsg) eqUserMsg.textContent = 'Preset saved: '+name;
+    showActionBubble('EQ PRESET SAVED');
+  });
+}
+if(eqUserLoadBtn){
+  eqUserLoadBtn.addEventListener('click', ()=>{
+    if(!eqUserSelect || !eqUserSelect.value){
+      if(eqUserMsg) eqUserMsg.textContent='Select a preset to load.';
+      return;
+    }
+    const gains = eqUserPresets[eqUserSelect.value];
+    if(!gains){
+      if(eqUserMsg) eqUserMsg.textContent='Preset not found.';
+      return;
+    }
+    applyEqGains(gains);
+    if(eqUserMsg) eqUserMsg.textContent = 'Preset loaded: '+eqUserSelect.value;
+    showActionBubble('EQ PRESET LOADED');
+  });
+}
+if(eqUserDelBtn){
+  eqUserDelBtn.addEventListener('click', ()=>{
+    if(!eqUserSelect || !eqUserSelect.value){
+      if(eqUserMsg) eqUserMsg.textContent='Select a preset to delete.';
+      return;
+    }
+    const name = eqUserSelect.value;
+    if(!eqUserPresets[name]){
+      if(eqUserMsg) eqUserMsg.textContent='Preset not found.';
+      return;
+    }
+    delete eqUserPresets[name];
+    saveUserEqPresets();
+    hydrateUserEqPresets();
+    if(eqUserMsg) eqUserMsg.textContent='Preset deleted: '+name;
+    showActionBubble('EQ PRESET DELETED');
+  });
+}
+
+/* =========================
+   BOOTSTRAP
+========================= */
+(function init(){
+  buildPalette();
+  buildEq();
+  loadVault();
+  restore();
+  initGenesisMintUI();
+  hydrateUiFxControls();
+  hydrateTextFxControls();
+  setupLyricsFrame();   // ensures iframe + canvas are live on first paint
+})();
+</script>
+</body>
+</html>
